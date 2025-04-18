@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-
+using namespace std;
 enum SocialClass {
     PEASANT,
     MERCHANT,
@@ -125,13 +125,13 @@ public:
         if (resource > (number * costToTrain)) {
             morale += 10;
             resource -= (number * costToTrain);
-            message = "Training soldiers... Morale increased!";
+            message = "Training..Morale increased";
         }
         else {
-            message = "Not enough resources to train soldiers!";
+            message = "Not enough resources ";
         }
         if (!message.empty()) {
-            DrawText(message.c_str(), x, y, 20, YELLOW);
+            DrawText(message.c_str(), x, y, 20, RED);
         }
     }
 
@@ -187,12 +187,9 @@ public:
 
     void DisplayLeadership(int x, int y) {
         std::string leadershipData = "Leadership Approval: " + std::to_string(approvalRating) + "%";
-        DrawText(leadershipData.c_str(), x, y, 20, WHITE);
+        DrawText(leadershipData.c_str(), 920, 580, 20, WHITE);
 
-        // Display any messages related to leadership events (election or coup)
-        if (!message.empty()) {
-            DrawText(message.c_str(), x, y + 40, 20, YELLOW); // Display message below the leadership stats
-        }
+   
     }
 
     void Election() {
@@ -237,153 +234,6 @@ struct Building {
 };
 
 class RenderSystem {
-public:
-    RenderSystem() {}
-
-    void Init() {
-        screenWidth = 1200;
-        screenHeight = 700;
-        gridSize = 100; // size of each block
-        InitWindow(screenWidth, screenHeight, "Stronghold");
-        SetTargetFPS(60);
-
-        // Chief starting position
-        chiefPosition = { 0, 0, (float)gridSize, (float)gridSize };
-
-        // Manually initialize buildings
-        buildingCount = 7;
-        const int x = 5;
-        const int y = 3;
-        buildings[0] = { "Castle", {(float)(x * gridSize), (float)(y * gridSize), (float)gridSize, (float)gridSize}, DARKGRAY };
-        buildings[1] = { "Barracks", {(float)((x - 1) * gridSize), (float)((y - 1) * gridSize), (float)gridSize, (float)gridSize}, RED };
-        buildings[2] = { "Market", {(float)((x + 1) * gridSize), (float)((y - 1) * gridSize), (float)gridSize, (float)gridSize}, ORANGE };
-        buildings[3] = { "Granary", {(float)((x - 1) * gridSize), (float)((y + 1) * gridSize), (float)gridSize, (float)gridSize}, GREEN };
-        buildings[4] = { "Town Hall", {(float)((x + 1) * gridSize), (float)((y + 1) * gridSize), (float)gridSize, (float)gridSize}, BLUE };
-        buildings[5] = { "Blacksmith", {(float)(x * gridSize), (float)((y - 2) * gridSize), (float)gridSize, (float)gridSize}, BROWN };
-        buildings[6] = { "Church", {(float)(x * gridSize), (float)((y + 2) * gridSize), (float)gridSize, (float)gridSize}, PURPLE };
-
-        // Defaults
-        socialStructure.AddCitizen(Citizen("ALi", PEASANT));
-        socialStructure.AddCitizen(Citizen("Hassam", NOBLE));
-        socialStructure.AddCitizen(Citizen("Ahmad", SOLDIER));
-
-        population = Population(500, 100, 70, 100);
-        military = Military(200, 80, 100, 100, 10, 1000);
-        leadership = Leadership(75);
-
-        std::srand(std::time(nullptr));
-    }
-     void DrawSideWindow() {
-        // Define the position and size of the side window
-        int sideWindowWidth = 300;  // Width of the side window
-        int sideWindowHeight = screenHeight;
-        int sideWindowX = screenWidth - sideWindowWidth;  // Position on the right side
-        int sideWindowY = 0;
-
-        // Draw the side window background
-        DrawRectangle(sideWindowX, sideWindowY, sideWindowWidth, sideWindowHeight, DARKGRAY);
-
-        // Draw the title for the side window (Notices or Updates)
-        DrawText("Notices", sideWindowX + 10, sideWindowY + 10, 20, WHITE);
-
-        // Display some notices
-        // For now, let's show a few example messages
-        std::string notice1 = "Welcome to the Kingdom!";
-        std::string notice2 = "Your population is growing!";
-        std::string notice3 = "Train your military to defend the realm.";
-
-        // Display notices with some spacing
-        DrawText(notice1.c_str(), sideWindowX + 10, sideWindowY + 40, 20, WHITE);
-        DrawText(notice2.c_str(), sideWindowX + 10, sideWindowY + 70, 20, WHITE);
-        DrawText(notice3.c_str(), sideWindowX + 10, sideWindowY + 100, 20, WHITE);
-    }
-
-    void  Run() {
-         int selectedOption = 0;  // Track selected menu option
-         while (!WindowShouldClose()) {
-             UpdateChiefMovement();
-             population.UpdatePopulation();
-             military.UpdateMilitary();
-             leadership.Election();
-
-             // Random event every 10 seconds
-             if (GetTime() > nextEventTime) {
-                 TriggerRandomEvent();
-                 nextEventTime = GetTime() + 10;  // Trigger next event in 10 seconds
-             }
-
-             BeginDrawing();
-             ClearBackground(SKYBLUE);
-
-             DrawGradientBackground();
-             DrawGrid();
-             DrawBuildings();
-             DrawChief();
-
-             // Draw the side window to show notices
-             DrawSideWindow();
-
-             if (CheckCollisionRecs(chiefPosition, buildings[0].rect)) {
-                 DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
-                 DrawText("1. Display Military", screenWidth - 200, 50, 20, WHITE);
-                 DrawText("2. Display Population", screenWidth - 200, 80, 20, WHITE);
-                 DrawText("3. View Leadership", screenWidth - 200, 110, 20, WHITE);
-
-                 if (IsKeyPressed(KEY_A)) {
-                     selectedOption = 1;
-                 }
-                 if (IsKeyPressed(KEY_B)) {
-                     selectedOption = 2;
-                 }
-                 if (IsKeyPressed(KEY_C)) {
-                     selectedOption = 3;
-                 }
-
-                 menueB0(selectedOption);
-             }
-
-             if (CheckCollisionRecs(chiefPosition, buildings[1].rect)) {
-                 DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
-                 DrawText("A. Train Military", screenWidth - 200, 50, 20, WHITE);
-                 DrawText("B. display military", screenWidth - 200, 110, 20, WHITE);
-                 DrawText("C. Recruit military", screenWidth - 200, 160, 20, WHITE);
-
-                 if (IsKeyPressed(KEY_A)) {
-                     selectedOption = 1;
-                 }
-                 if (IsKeyPressed(KEY_B)) {
-                     selectedOption = 2;
-                 }
-                 if (IsKeyPressed(KEY_C)) {
-                     selectedOption = 3;
-                 }
-                 menueB1(selectedOption);
-             }
-             if (CheckCollisionRecs(chiefPosition, buildings[4].rect)) {
-                 DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
-                 DrawText("1. View Leadership", screenWidth - 200, 50, 20, WHITE);
-                 DrawText("2. Start Election", screenWidth - 200, 80, 20, WHITE);
-                 DrawText("3. Handle Coup", screenWidth - 200, 110, 20, WHITE);
-
-                 if (IsKeyPressed(KEY_A)) {
-                     selectedOption = 1;
-                 }
-                 if (IsKeyPressed(KEY_B)) {
-                     selectedOption = 2;
-                 }
-                 if (IsKeyPressed(KEY_C)) {
-                     selectedOption = 3;
-                 }
-
-                 menueB2(selectedOption);
-             }
-
-             DisplayStats();
-
-             EndDrawing();
-         }
-         CloseWindow();
-     }
 
 private:
     Building buildings[10];
@@ -393,6 +243,11 @@ private:
     int screenWidth;
     int screenHeight;
     float nextEventTime = 10.0f; // Track time for random events
+    int x = screenWidth - 260; // side window position
+    int y;
+    string message;
+    int  currentLevel = 1;            // <─ start at level 1
+
 
     SocialStructure socialStructure;
     Population population;
@@ -406,36 +261,18 @@ private:
         if (IsKeyPressed(KEY_UP) && chiefPosition.y > 0) chiefPosition.y -= gridSize;
     }
 
-    void TriggerRandomEvent() {
-        int eventType = std::rand() % 3;  // 3 different events
-
-        switch (eventType) {
-        case 0:  // Famine
-            population.foodSupply -= 20;
-            std::cout << "A famine has occurred! Food supply decreases." << std::endl;
-            break;
-        case 1:  // War
-            military.soldiersCount += 50;
-            std::cout << "War has broken out! The army is reinforced." << std::endl;
-            break;
-        case 2:  // Rebellion
-            leadership.UpdateLeadership(-10);
-            socialStructure.ChangeLoyalty(-20);
-            std::cout << "A rebellion has started! Leadership and loyalty decrease." << std::endl;
-            break;
-        }
-    }
+  
 
     void menueB0(int option) {
         switch (option) {
         case 1:
-            military.DisplayMilitary(900, 300);
+            military.DisplayMilitary(920, 150);
             break;
         case 2:
-            population.DisplayPopulation(900, 300);
+            population.DisplayPopulation(920, 175);
             break;
         case 3:
-            leadership.DisplayLeadership(900, 300);
+            leadership.DisplayLeadership(920, 200);
             break;
         default:
             break;
@@ -444,14 +281,14 @@ private:
     void menueB1(int option) {
         switch (option) {
         case 1:
-            military.TrainSoldiers(10, 900, 300);
+            military.TrainSoldiers(10, 920, 100);
             break;
         case 2:
-            military.DisplayMilitary(900, 300);
+            military.DisplayMilitary(920, 125);
             break;
         case 3:
-            military.Recruit(population.currentPopulation, 900, 300);
-            military.DisplayMilitary(900, 300);
+            military.Recruit(population.currentPopulation, 920, 40);
+            military.DisplayMilitary(920, 150);
             break;
         default:
             break;
@@ -459,16 +296,16 @@ private:
     }
     void menueB2(int option) {
         switch (option) {
-        case 1:  // View Leadership
-            leadership.DisplayLeadership(900, 300);  // Display leadership stats at (900, 300)
+        case 1: 
+            leadership.DisplayLeadership(920, 150); 
             break;
-        case 2:  // Start Election
-            leadership.Election();  // Trigger election based on approval rating
-            leadership.DisplayLeadership(900, 300);  // Display leadership stats after election
+        case 2:  
+            leadership.Election();  
+            leadership.DisplayLeadership(920, 175); 
             break;
-        case 3:  // Handle Coup
-            leadership.Coup();  // Trigger coup if leadership is weak
-            leadership.DisplayLeadership(900, 300);  // Display leadership stats after coup
+        case 3:
+            leadership.Coup();  
+            leadership.DisplayLeadership(920, 200);  
             break;
         default:
             break;
@@ -480,7 +317,29 @@ private:
         for (int y = 0; y < screenHeight; y += gridSize)
             DrawLine(0, y, screenWidth, y, LIGHTGRAY);
     }
+    void DrawLevel() const
+    {
+        std::string label = "Level " + std::to_string(currentLevel);
 
+        int fontSize = 20;
+        int textW = MeasureText(label.c_str(), fontSize);
+        int textH = fontSize;
+
+        int padding = 8;
+        int boxX = 10;                    
+        int boxY = 10;
+        int boxW = textW + padding * 2;
+        int boxH = textH + padding * 2;
+
+        DrawRectangleRounded({ (float)boxX, (float)boxY,
+                               (float)boxW, (float)boxH }, 0.25f, 8, DARKBROWN);
+       
+
+        // --- text centred in the box ------------------------------
+        int textX = boxX + padding;
+        int textY = boxY + padding;
+        DrawText(label.c_str(), textX, textY, fontSize, BEIGE);
+    }
     void DrawBuildings() {
         int spacing = gridSize * 3; // Increase space between buildings
 
@@ -511,11 +370,11 @@ private:
                 // Base
                 DrawRectangleRec(buildings[i].rect, RED);
                 // Roof
-                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 15, gridSize - 20, 15, RED);
+                DrawRectangle(buildings[i].rect.x + 5, buildings[i].rect.y - 15, gridSize - 20, 15, RED);
                 // Chimney
-                DrawRectangle(buildings[i].rect.x + 20, buildings[i].rect.y - 30, 10, 15, DARKBROWN);
+                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y - 30, 10, 15, DARKBROWN);
                 // Windows
-                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y + 10, 30, 15, LIGHTGRAY); // Left Window
+                DrawRectangle(buildings[i].rect.x + 5, buildings[i].rect.y + 10, 30, 15, LIGHTGRAY); // Left Window
                 DrawRectangle(buildings[i].rect.x + gridSize - 40, buildings[i].rect.y + 10, 30, 15, LIGHTGRAY); // Right Window
                 // Door
                 DrawRectangle(buildings[i].rect.x + (gridSize / 2) - 20, buildings[i].rect.y + gridSize - 20, 40, 20, BROWN);
@@ -586,17 +445,84 @@ private:
                 DrawText(("Entered: " + buildings[i].name).c_str(), 10, 560, 18, MAROON);
             }
         }
+
     }
 
 
 
 
 
+    static const Color SKIN;
+    static const Color CLOAK;
+    static const Color BELT;
 
-    void DrawChief() {
-        DrawRectangleRounded(chiefPosition, 0.3f, 4, BLACK);
-        DrawText("Chief", chiefPosition.x + 10, chiefPosition.y + 35, 10, WHITE);
+ 
+    void DrawChief()
+    {
+        float cx = chiefPosition.x;       
+        float cy = chiefPosition.y;
+        float s = gridSize;                 
+
+    
+        float headR = s * 0.18f;           
+        Vector2 headCenter = { cx + s * 0.50f, cy + s * 0.28f };
+        DrawCircleV(headCenter, headR, SKIN);
+
+       
+        float crownH = headR * 0.55f;
+        float crownY = headCenter.y - headR - crownH;
+        float crownW = headR * 2.0f;
+        float crownX = headCenter.x - crownW * 0.5f;
+        DrawRectangle(crownX, crownY, crownW, crownH, GOLD);
+
+        float spikeW = crownW / 5.0f;
+        float spikeH = crownH * 1.2f;
+        for (int i = 0; i < 3; ++i)
+        {
+            float sx = crownX + spikeW * (1.0f + 1.5f * i);
+            DrawTriangle(   { sx,crownY },                    
+                { sx + spikeW,     crownY },                  
+                { sx + spikeW * 0.5f, crownY - spikeH },     
+                GOLD);
+        }
+
+        float bodyW = s * 0.40f;
+        float bodyH = s * 0.50f;
+        float bodyX = cx + (s - bodyW) * 0.5f;
+        float bodyY = cy + s * 0.40f;
+        DrawRectangle(bodyX, bodyY, bodyW, bodyH, CLOAK);
+
+        float beltH = bodyH * 0.14f;
+        DrawRectangle(bodyX, bodyY + bodyH * 0.45f, bodyW, beltH, BELT);
+
+     
+        float armW = s * 0.12f;
+        float armH = s * 0.25f;
+        float armY = bodyY + bodyH * 0.15f;
+
+        DrawRectangle(bodyX - armW, armY, armW, armH, CLOAK);
+        DrawRectangle(bodyX + bodyW, armY, armW, armH, CLOAK);
+
+       
+        float legW = s * 0.12f;
+        float legH = s * 0.28f;
+        float legY = bodyY + bodyH;
+
+        DrawRectangle(bodyX + bodyW * 0.15f, legY, legW, legH, DARKBROWN);      
+        DrawRectangle(bodyX + bodyW * 0.73f, legY, legW, legH, DARKBROWN);     
+
+       
+        float sceptreX1 = bodyX + bodyW + armW * 0.5f;
+        float sceptreY1 = armY - s * 0.10f;
+        float sceptreY2 = sceptreY1 + s * 0.65f;
+        DrawLineEx({ sceptreX1, sceptreY1 }, { sceptreX1, sceptreY2 }, 4, GOLD);
+        DrawCircle(sceptreX1, sceptreY1, 6, YELLOW);
+
+  
     }
+
+
+
 
     void DrawGradientBackground() {
         for (int y = 0; y < screenHeight; y++) {
@@ -606,12 +532,180 @@ private:
     }
 
     void DisplayStats() {
-        population.DisplayPopulation(10, 10);
-        military.DisplayMilitary(10, 100);
-        leadership.DisplayLeadership(10, 200);
-        socialStructure.PrintLoyalty();
+        DrawText("**STATS**", screenWidth-280, 380, 20, YELLOW); // Display message below the leadership stats
+        population.DisplayPopulation(screenWidth-280,400);
+        military.DisplayMilitary(screenWidth - 280, 490);
+        leadership.DisplayLeadership(screenWidth-280, 550);
+    }
+
+public:
+    RenderSystem() {}
+
+    void Init() {
+        screenWidth = 1200;
+        screenHeight = 700;
+        gridSize = 100; // size of each block
+        InitWindow(screenWidth, screenHeight, "Stronghold");
+        SetTargetFPS(60);
+
+        // Chief starting position
+        chiefPosition = { 50,350 , (float)gridSize, (float)gridSize };
+
+        buildingCount = 7;
+        const int x = 5;
+        const int y = 3;
+        buildings[0] = { "Castle", {(float)(x * gridSize), (float)(y * gridSize), (float)gridSize, (float)gridSize}, DARKGRAY };
+        buildings[1] = { "Barracks", {(float)((x - 1) * gridSize - 70), (float)((y - 1) * gridSize), (float)gridSize, (float)gridSize}, RED };
+        buildings[2] = { "Market", {(float)((x + 1) * gridSize + 70), (float)((y - 1) * gridSize), (float)gridSize, (float)gridSize}, ORANGE };
+        buildings[3] = { "Granary", {(float)((x - 1) * gridSize - 70), (float)((y + 1) * gridSize), (float)gridSize, (float)gridSize}, GREEN };
+        buildings[4] = { "Town Hall", {(float)((x + 1) * gridSize + 70), (float)((y + 1) * gridSize), (float)gridSize, (float)gridSize}, BLUE };
+        buildings[5] = { "Blacksmith", {(float)(x * gridSize), (float)((y - 2) * gridSize + 40), (float)gridSize, (float)gridSize}, BROWN };
+        buildings[6] = { "Church", {(float)(x * gridSize), (float)((y + 2) * gridSize - 40), (float)gridSize, (float)gridSize}, PURPLE };
+
+        socialStructure.AddCitizen(Citizen("ALi", PEASANT));
+        socialStructure.AddCitizen(Citizen("Hassam", NOBLE));
+        socialStructure.AddCitizen(Citizen("Ahmad", SOLDIER));
+
+        population = Population(500, 100, 70, 100);
+        military = Military(200, 80, 100, 100, 10, 1000);
+        leadership = Leadership(75);
+
+        std::srand(std::time(nullptr));
+    }
+    void DrawSideWindow() {
+        int sideWindowWidth = 300;
+        int sideWindowHeight = screenHeight; //700
+        int sideWindowX = screenWidth - sideWindowWidth;
+        int sideWindowY = 0;
+
+        DrawRectangle(sideWindowX, sideWindowY, sideWindowWidth, sideWindowHeight, DARKGRAY);
+
+        DrawText("Notices", sideWindowX + 10, sideWindowY + 10, 20, WHITE);
+
+
+    }
+
+    // not displyaing the message in the notice box
+    void TriggerRandomEvent() {
+        int eventType = rand() % 3;
+        switch (eventType) {
+        case 0:
+            population.foodSupply -= 20;
+            message = "A famine has occurred!";
+            if (!message.empty()) {
+                DrawText(message.c_str(), 920, 30, 20, YELLOW);
+            }
+            break;
+        case 1:
+            military.soldiersCount += 50;
+            message = "War has broken out!";
+            if (!message.empty()) {
+                DrawText(message.c_str(), 920, 30, 20, YELLOW);
+            }
+            break;
+        case 2:
+            leadership.UpdateLeadership(-10);
+            socialStructure.ChangeLoyalty(-20);
+            message = "A rebellion has started!";
+            if (!message.empty()) {
+                DrawText(message.c_str(), 300, 300, 20, YELLOW);
+            }
+            break;
+        }
+    }
+
+    void  Run() {
+        int selectedOption = 0;
+        while (!WindowShouldClose()) {
+            UpdateChiefMovement();
+            population.UpdatePopulation();
+            military.UpdateMilitary();
+            leadership.Election();
+
+            if (GetTime() > nextEventTime) {
+                TriggerRandomEvent();
+                nextEventTime = GetTime() + 10;
+            }
+
+            BeginDrawing();
+            ClearBackground(SKYBLUE);
+
+            DrawGradientBackground();
+            DrawGrid();
+            DrawBuildings();
+            DrawChief();
+            DrawLevel();            
+
+
+            DrawSideWindow();
+
+            if (CheckCollisionRecs(chiefPosition, buildings[0].rect)) {
+                DrawText("Option Menu", screenWidth - 280, 250, 20, GOLD);
+                DrawText("1. Display Military", screenWidth - 280, 275, 20, WHITE);
+                DrawText("2. Display Population", screenWidth - 280, 300, 20, WHITE);
+                DrawText("3. View Leadership", screenWidth - 280, 325, 20, WHITE);
+
+                if (IsKeyPressed(KEY_A)) {
+                    selectedOption = 1;
+                }
+                if (IsKeyPressed(KEY_B)) {
+                    selectedOption = 2;
+                }
+                if (IsKeyPressed(KEY_C)) {
+                    selectedOption = 3;
+                }
+
+                menueB0(selectedOption);
+            }
+
+            if (CheckCollisionRecs(chiefPosition, buildings[1].rect)) {
+                DrawText("Option Menu", screenWidth - 280, 250, 20, GOLD);
+                DrawText("A. Train Military", screenWidth - 280, 275, 20, WHITE);
+                DrawText("B. display military", screenWidth - 280, 300, 20, WHITE);
+                DrawText("C. Recruit military", screenWidth - 280, 325, 20, WHITE);
+
+                if (IsKeyPressed(KEY_A)) {
+                    selectedOption = 1;
+                }
+                if (IsKeyPressed(KEY_B)) {
+                    selectedOption = 2;
+                }
+                if (IsKeyPressed(KEY_C)) {
+                    selectedOption = 3;
+                }
+                menueB1(selectedOption);
+            }
+            if (CheckCollisionRecs(chiefPosition, buildings[4].rect)) {
+                DrawText("Option Menu", screenWidth - 280, 250, 20, GOLD);
+                DrawText("1. View Leadership", screenWidth - 280, 275, 20, WHITE);
+                DrawText("2. Start Election", screenWidth - 280, 300, 20, WHITE);
+                DrawText("3. Handle Coup", screenWidth - 280, 325, 20, WHITE);
+
+                if (IsKeyPressed(KEY_A)) {
+                    selectedOption = 1;
+                }
+                if (IsKeyPressed(KEY_B)) {
+                    selectedOption = 2;
+                }
+                if (IsKeyPressed(KEY_C)) {
+                    selectedOption = 3;
+                }
+
+                menueB2(selectedOption);
+            }
+
+            DisplayStats();
+
+            EndDrawing();
+        }
+        CloseWindow();
     }
 };
+
+
+const Color RenderSystem::SKIN = { 255, 224, 189, 255 };   
+const Color RenderSystem::CLOAK = { 128,  32,  96, 255 };   
+const Color RenderSystem::BELT = { 60,  30,   0, 255 };   
 
 int main() {
     RenderSystem renderer;

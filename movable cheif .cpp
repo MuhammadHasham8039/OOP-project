@@ -273,92 +273,117 @@ public:
 
         std::srand(std::time(nullptr));
     }
+     void DrawSideWindow() {
+        // Define the position and size of the side window
+        int sideWindowWidth = 300;  // Width of the side window
+        int sideWindowHeight = screenHeight;
+        int sideWindowX = screenWidth - sideWindowWidth;  // Position on the right side
+        int sideWindowY = 0;
 
-    void Run() {
-        int selectedOption = 0;  // Track selected menu option
-        while (!WindowShouldClose()) {
-            UpdateChiefMovement();
-            population.UpdatePopulation();
-            military.UpdateMilitary();
-            leadership.Election();
+        // Draw the side window background
+        DrawRectangle(sideWindowX, sideWindowY, sideWindowWidth, sideWindowHeight, DARKGRAY);
 
-            // Random event every 10 seconds
-            if (GetTime() > nextEventTime) {
-                TriggerRandomEvent();
-                nextEventTime = GetTime() + 10;  // Trigger next event in 10 seconds
-            }
+        // Draw the title for the side window (Notices or Updates)
+        DrawText("Notices", sideWindowX + 10, sideWindowY + 10, 20, WHITE);
 
-            BeginDrawing();
-            ClearBackground(SKYBLUE);
+        // Display some notices
+        // For now, let's show a few example messages
+        std::string notice1 = "Welcome to the Kingdom!";
+        std::string notice2 = "Your population is growing!";
+        std::string notice3 = "Train your military to defend the realm.";
 
-            DrawGradientBackground();
-
-            DrawGrid();
-            DrawBuildings();
-            DrawChief();
-
-
-            if (CheckCollisionRecs(chiefPosition, buildings[0].rect)) {
-                DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
-                DrawText("1. Display Military", screenWidth - 200, 50, 20, WHITE);
-                DrawText("2. Display Population", screenWidth - 200, 80, 20, WHITE);
-                DrawText("3. View Leadership", screenWidth - 200, 110, 20, WHITE);
-
-                if (IsKeyPressed(KEY_A)) {
-                    selectedOption = 1;
-                }
-                if (IsKeyPressed(KEY_B)) {
-                    selectedOption = 2;
-                }
-                if (IsKeyPressed(KEY_C)) {
-                    selectedOption = 3;
-                }
-
-                menueB0(selectedOption);
-            }
-
-            if (CheckCollisionRecs(chiefPosition, buildings[1].rect)) {
-                DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
-                DrawText("A. Train Military", screenWidth - 200, 50, 20, WHITE);
-                DrawText("B. display military", screenWidth - 200, 110, 20, WHITE);
-                DrawText("C. Recruit military", screenWidth - 200, 160, 20, WHITE);
-
-                if (IsKeyPressed(KEY_A)) {
-                    selectedOption = 1;
-                }
-                if (IsKeyPressed(KEY_B)) {
-                    selectedOption = 2;
-                }
-                if (IsKeyPressed(KEY_C)) {
-                    selectedOption = 3;
-                }
-                menueB1(selectedOption);
-            }
-            if (CheckCollisionRecs(chiefPosition, buildings[4].rect)) {
-                DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
-                DrawText("1. View Leadership", screenWidth - 200, 50, 20, WHITE);
-                DrawText("2. Start Election", screenWidth - 200, 80, 20, WHITE);
-                DrawText("3. Handle Coup", screenWidth - 200, 110, 20, WHITE);
-
-                if (IsKeyPressed(KEY_A)) {
-                    selectedOption = 1;
-                }
-                if (IsKeyPressed(KEY_B)) {
-                    selectedOption = 2;
-                }
-                if (IsKeyPressed(KEY_C)) {
-                    selectedOption = 3;
-                }
-
-                menueB2(selectedOption);
-            }
-
-            DisplayStats();
-
-            EndDrawing();
-        }
-        CloseWindow();
+        // Display notices with some spacing
+        DrawText(notice1.c_str(), sideWindowX + 10, sideWindowY + 40, 20, WHITE);
+        DrawText(notice2.c_str(), sideWindowX + 10, sideWindowY + 70, 20, WHITE);
+        DrawText(notice3.c_str(), sideWindowX + 10, sideWindowY + 100, 20, WHITE);
     }
+
+    void  Run() {
+         int selectedOption = 0;  // Track selected menu option
+         while (!WindowShouldClose()) {
+             UpdateChiefMovement();
+             population.UpdatePopulation();
+             military.UpdateMilitary();
+             leadership.Election();
+
+             // Random event every 10 seconds
+             if (GetTime() > nextEventTime) {
+                 TriggerRandomEvent();
+                 nextEventTime = GetTime() + 10;  // Trigger next event in 10 seconds
+             }
+
+             BeginDrawing();
+             ClearBackground(SKYBLUE);
+
+             DrawGradientBackground();
+             DrawGrid();
+             DrawBuildings();
+             DrawChief();
+
+             // Draw the side window to show notices
+             DrawSideWindow();
+
+             if (CheckCollisionRecs(chiefPosition, buildings[0].rect)) {
+                 DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
+                 DrawText("1. Display Military", screenWidth - 200, 50, 20, WHITE);
+                 DrawText("2. Display Population", screenWidth - 200, 80, 20, WHITE);
+                 DrawText("3. View Leadership", screenWidth - 200, 110, 20, WHITE);
+
+                 if (IsKeyPressed(KEY_A)) {
+                     selectedOption = 1;
+                 }
+                 if (IsKeyPressed(KEY_B)) {
+                     selectedOption = 2;
+                 }
+                 if (IsKeyPressed(KEY_C)) {
+                     selectedOption = 3;
+                 }
+
+                 menueB0(selectedOption);
+             }
+
+             if (CheckCollisionRecs(chiefPosition, buildings[1].rect)) {
+                 DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
+                 DrawText("A. Train Military", screenWidth - 200, 50, 20, WHITE);
+                 DrawText("B. display military", screenWidth - 200, 110, 20, WHITE);
+                 DrawText("C. Recruit military", screenWidth - 200, 160, 20, WHITE);
+
+                 if (IsKeyPressed(KEY_A)) {
+                     selectedOption = 1;
+                 }
+                 if (IsKeyPressed(KEY_B)) {
+                     selectedOption = 2;
+                 }
+                 if (IsKeyPressed(KEY_C)) {
+                     selectedOption = 3;
+                 }
+                 menueB1(selectedOption);
+             }
+             if (CheckCollisionRecs(chiefPosition, buildings[4].rect)) {
+                 DrawText("Option Menu", screenWidth - 200, 20, 20, GOLD);
+                 DrawText("1. View Leadership", screenWidth - 200, 50, 20, WHITE);
+                 DrawText("2. Start Election", screenWidth - 200, 80, 20, WHITE);
+                 DrawText("3. Handle Coup", screenWidth - 200, 110, 20, WHITE);
+
+                 if (IsKeyPressed(KEY_A)) {
+                     selectedOption = 1;
+                 }
+                 if (IsKeyPressed(KEY_B)) {
+                     selectedOption = 2;
+                 }
+                 if (IsKeyPressed(KEY_C)) {
+                     selectedOption = 3;
+                 }
+
+                 menueB2(selectedOption);
+             }
+
+             DisplayStats();
+
+             EndDrawing();
+         }
+         CloseWindow();
+     }
 
 private:
     Building buildings[10];
@@ -457,6 +482,8 @@ private:
     }
 
     void DrawBuildings() {
+        int spacing = gridSize * 3; // Increase space between buildings
+
         for (int i = 0; i < buildingCount; i++) {
             // Shadow effect
             DrawRectangleRec({ buildings[i].rect.x + 5, buildings[i].rect.y + 5, gridSize, gridSize }, Fade(BLACK, 0.2f));
@@ -465,7 +492,94 @@ private:
             bool isNear = CheckCollisionRecs(chiefPosition, buildings[i].rect);
             Color drawColor = isNear ? GOLD : buildings[i].color;
 
-            DrawRectangleRec(buildings[i].rect, drawColor);
+            // Castle - Strong Fortress Look
+            if (buildings[i].name == "Castle") {
+                // Base of the castle (walls)
+                DrawRectangleRec(buildings[i].rect, DARKGRAY);
+                // Draw turrets
+                DrawRectangle(buildings[i].rect.x - 10, buildings[i].rect.y - 40, gridSize / 4, gridSize / 3, DARKGRAY); // Left turret
+                DrawRectangle(buildings[i].rect.x + gridSize - 10, buildings[i].rect.y - 40, gridSize / 4, gridSize / 3, DARKGRAY); // Right turret
+                // Castle gate
+                DrawRectangle(buildings[i].rect.x + gridSize / 4, buildings[i].rect.y + gridSize - 20, gridSize / 2, 20, BROWN);
+                // Draw windows
+                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY); // Window 1
+                DrawRectangle(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY); // Window 2
+            }
+
+            // Barracks - Military Style
+            else if (buildings[i].name == "Barracks") {
+                // Base
+                DrawRectangleRec(buildings[i].rect, RED);
+                // Roof
+                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 15, gridSize - 20, 15, RED);
+                // Chimney
+                DrawRectangle(buildings[i].rect.x + 20, buildings[i].rect.y - 30, 10, 15, DARKBROWN);
+                // Windows
+                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y + 10, 30, 15, LIGHTGRAY); // Left Window
+                DrawRectangle(buildings[i].rect.x + gridSize - 40, buildings[i].rect.y + 10, 30, 15, LIGHTGRAY); // Right Window
+                // Door
+                DrawRectangle(buildings[i].rect.x + (gridSize / 2) - 20, buildings[i].rect.y + gridSize - 20, 40, 20, BROWN);
+            }
+
+            // Market - Shop-like with Open Door
+            else if (buildings[i].name == "Market") {
+                // Base of the market
+                DrawRectangleRec(buildings[i].rect, ORANGE);
+                // Roof
+                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 20, gridSize - 20, 20, ORANGE);
+                // Open front door (entrance)
+                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize - 20, gridSize - 30, 20, YELLOW);
+                // Windows
+                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY); // Window 1
+                DrawRectangle(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY); // Window 2
+            }
+
+            // Town Hall - A grand building with a tower
+            else if (buildings[i].name == "Town Hall") {
+                // Base
+                DrawRectangleRec(buildings[i].rect, BLUE);
+                // Tower
+                DrawRectangle(buildings[i].rect.x + gridSize / 3, buildings[i].rect.y - 30, gridSize / 3, 30, DARKBLUE);
+                // Roof of the tower
+                DrawTriangle({ buildings[i].rect.x + gridSize / 3, buildings[i].rect.y - 30 },
+                    { buildings[i].rect.x + gridSize / 3 + gridSize / 6, buildings[i].rect.y - 60 },
+                    { buildings[i].rect.x + gridSize / 3 + gridSize / 3, buildings[i].rect.y - 30 }, DARKBLUE);
+                // Windows
+                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY); // Window 1
+                DrawRectangle(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY); // Window 2
+            }
+
+            // Blacksmith - Furnished with a chimney and forge
+            else if (buildings[i].name == "Blacksmith") {
+                // Base of the blacksmith
+                DrawRectangleRec(buildings[i].rect, BROWN);
+                // Roof
+                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 15, gridSize - 20, 15, DARKBROWN);
+                // Furnace
+                DrawRectangle(buildings[i].rect.x + gridSize / 3, buildings[i].rect.y + gridSize - 30, gridSize / 3, 15, DARKGRAY);
+                // Chimney
+                DrawRectangle(buildings[i].rect.x + 20, buildings[i].rect.y - 30, 10, 15, DARKBROWN);
+                // Door
+                DrawRectangle(buildings[i].rect.x + (gridSize / 2) - 20, buildings[i].rect.y + gridSize - 20, 40, 20, BROWN);
+            }
+
+            // Church - Religious and monumental
+            else if (buildings[i].name == "Church") {
+                // Base of the church
+                DrawRectangleRec(buildings[i].rect, PURPLE);
+                // Roof
+                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 15, gridSize - 20, 15, DARKPURPLE);
+                // Bell Tower
+                DrawRectangle(buildings[i].rect.x + gridSize / 2 - 5, buildings[i].rect.y - 40, 10, 20, DARKPURPLE);
+                DrawTriangle({ buildings[i].rect.x + gridSize / 2 - 5, buildings[i].rect.y - 40 },
+                    { buildings[i].rect.x + gridSize / 2 + 5, buildings[i].rect.y - 60 },
+                    { buildings[i].rect.x + gridSize / 2 + 15, buildings[i].rect.y - 40 }, DARKPURPLE);
+                // Cross on top of the church
+                DrawLine(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y - 60, buildings[i].rect.x + gridSize / 2, buildings[i].rect.y - 75, WHITE); // Vertical part
+                DrawLine(buildings[i].rect.x + gridSize / 2 - 10, buildings[i].rect.y - 67, buildings[i].rect.x + gridSize / 2 + 10, buildings[i].rect.y - 67, WHITE); // Horizontal part
+            }
+
+            // Display building name
             DrawText(buildings[i].name.c_str(), buildings[i].rect.x + 5, buildings[i].rect.y + 35, 10, WHITE);
 
             if (isNear) {
@@ -473,6 +587,11 @@ private:
             }
         }
     }
+
+
+
+
+
 
     void DrawChief() {
         DrawRectangleRounded(chiefPosition, 0.3f, 4, BLACK);

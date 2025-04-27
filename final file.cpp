@@ -1,47 +1,47 @@
-﻿//#include "raylib.h"
-//#include <string>
-//#include <iostream>
-//#include <cstdlib>
-//#include <ctime>
-//using namespace std;
-//class Resources {
-//public:
+// ﻿#include "raylib.h"
+// #include <string>
+// #include <iostream>
+// #include <cstdlib>
+// #include <ctime>
+// using namespace std;
+// class Resources {
+// public:
 //    int food = 1000;
 //    int wood;
 //    int stone;
 //    int iron;
-//
+
 //    Resources() : food(0), wood(0), stone(0), iron(0) {}
-//};
-//struct Economy {
+// };
+// struct Economy {
 //    float gold;
 //    float debt;         // when the gold gets less than zero
 //    float taxRate;
 //    float inflation;
 //    float interestRate;
 //    float corruption;
-//
+
 //    Economy() : gold(0.0f), debt(0.0f), taxRate(1.0f), inflation(0.0f), interestRate(0.05f), corruption(0.0f) {}
-//};
-//
-//// this will devide the population into segments like peasents merchants and nobels
-//struct SocialClass {
+// };
+
+// // this will devide the population into segments like peasents merchants and nobels
+// struct SocialClass {
 //    const char* name;
 //    int population;
 //    float unrest;
-//
+
 //    SocialClass() : name(""), population(0), unrest(0.0f) {}
-//};
-//
-//class Population :public Resources {
-//public:
+// };
+
+// class Population :public Resources {
+// public:
 //    int currentPopulation;
 //    int employmentRate;
-//
+
 //    Population() {}
 //    Population(int initialPopulation, int employmentRate, int wealth)
 //        : currentPopulation(initialPopulation), employmentRate(employmentRate) {}
-//
+
 //    // replicating the effects of resources on population
 //    void UpdatePopulation() {
 //        if (food < 50) {
@@ -51,20 +51,20 @@
 //            currentPopulation += 10;
 //        }
 //    }
-//
+
 //    void DisplayPopulation(int x, int y) {
 //        string populationData = "Population: " + std::to_string(currentPopulation) +
 //            "\nFood Supply: " + to_string(food) +
 //            "\nEmployment Rate: " + to_string(employmentRate);
-//
+
 //        DrawText(populationData.c_str(), x, y, 20, WHITE);
 //    }
-//
-//
-//};
-//
-//class Military : public Resources {
-//public:
+
+
+// };
+
+// class Military : public Resources {
+// public:
 //    int soldiers;
 //    int morale;
 //    float training; // percentage of training skills
@@ -73,11 +73,11 @@
 //    int costToTrain = 10;
 //    int trainCoins;
 //    string message;
-//
+
 //    Military() : message("") {}
 //    Military(int soldiersCount, int morale, int pay, int corruption, int trainCoins, int training)
 //        :training(training), trainCoins(trainCoins), soldiers(soldiersCount), morale(morale), pay(pay), corruption(corruption) {}
-//
+
 //    void Recruit(int population, int x, int y) {
 //        // recruit 10 percent of the population on call
 //        int newSoldiers = population / 10;
@@ -87,7 +87,7 @@
 //            DrawText(message.c_str(), x, y, 20, YELLOW);
 //        }
 //    }
-//
+
 //    void TrainSoldiers(int number, int x, int y) {
 //        if (trainCoins > (number * costToTrain)) {
 //            morale += 10;
@@ -103,55 +103,55 @@
 //            DrawText(message.c_str(), x, y, 20, RED);
 //        }
 //    }
-//
+
 //    void UpdateMilitary() {
 //        if (food < 50) {
 //            morale -= 10;
 //        }
-//
+
 //        if (pay < 50) {
 //            morale -= 15;
 //        }
-//
+
 //        if (morale < 50) {
 //           soldiers -= 5;
 //        }
-//
+
 //        if (corruption > 50) {
 //            morale -= 20;
 //            std::cout << "Corruption is high, morale is decreasing" << endl;
 //        }
 //    }
-//
+
 //    void DisplayMilitary(int x, int y) {
 //        std::string militaryData = "Soldiers: " + to_string(soldiers) +
 //            "\nMorale: " + to_string(morale) + "%" +
 //            "\nPay: " + to_string(pay) +
 //            "\nCorruption: " + to_string(corruption) + "%";
-//
+
 //        DrawText(militaryData.c_str(), x, y, 20, WHITE);
 //    }
-//
-//
+
+
 //    void IncreaseCorruption() {
 //        corruption += 5;  // Corruption increases over time
 //    }
-//};
-//
-//class Leadership {
-//public:
+// };
+
+// class Leadership {
+// public:
 //    string title;
 //    int approvalRating;
 //    bool isAlive;
 //    int age;
 //    string message;
-//
+
 //    // initialize X and Y with the best cordinates to dsiplay
 //    int x;
 //    int y;
 //    Leadership() : isAlive(true), message("") {}
 //    Leadership(int approvalRating) : approvalRating(approvalRating), isAlive(true), message("") {}
-//
+
 //    void UpdateLeadership(int change) {
 //        approvalRating += change;
 //        if (approvalRating < 0) approvalRating = 0;
@@ -159,15 +159,15 @@
 //        message = "the approval raiting is increased";
 //        DrawText(message.c_str(), x, y, 20, WHITE);
 //    }
-//
+
 //    void DisplayLeadership(int x, int y) {
 //        string leadershipData = "Leadership Approval: " + to_string(approvalRating) + "%";
 //        DrawText(leadershipData.c_str(), x, y, 20, WHITE);
-//
-//
+
+
 //    }
 //    // when the approval rating drop 
-//
+
 //    void Election() {
 //        if (approvalRating < 30) {
 //            message = "The leadership is weak. An election will take place!";
@@ -189,40 +189,40 @@
 //            message = "No coupe";
 //        }
 //        DrawText(message.c_str(), x, y, 20, YELLOW);
-//
+
 //    }
-//
+
 //    void margya() {
 //        if (isAlive && approvalRating < 10) {
 //            message = "The leader has died in battle due to low morale";
 //            isAlive = false;
 //            DrawText(message.c_str(), x, y, 20, YELLOW);
-//
+
 //        }
 //    }
-//};
-//
-//// rectangle is predefined in raylib
-//struct Building {
+// };
+
+// // rectangle is predefined in raylib
+// struct Building {
 //    string name;
 //    Rectangle rect;  // default having ==poxX=== posY=== width === height 
 //    Color color;
-//
-//};
-//
-//// EventLog: keeps a log of recent events (circular buffer of strings)
-//struct EventLog {
+
+// };
+
+// // EventLog: keeps a log of recent events (circular buffer of strings)
+// struct EventLog {
 //    static const int MAX_EVENTS = 5;
 //    char messages[MAX_EVENTS][128];  // fixed-size array for event text
 //    int count;  // number of events currently in log (<= MAX_EVENTS)
-//
+
 //    EventLog() : count(0) {
 //        // initialize messages with empty strings
 //        for (int i = 0; i < MAX_EVENTS; ++i) {
 //            messages[i][0] = '\0';
 //        }
 //    }
-//
+
 //    void add(const char* msg) {
 //        if (count < MAX_EVENTS) {
 //            // There is room in the log
@@ -238,11 +238,11 @@
 //            strcpy_s(messages[MAX_EVENTS - 1], sizeof(messages[MAX_EVENTS - 1]), msg);
 //        }
 //    }
-//};
-//
-//// Kingdom: encapsulates the entire state of the simulation and update logic
-//class Kingdom {
-//public:
+// };
+
+// // Kingdom: encapsulates the entire state of the simulation and update logic
+// class Kingdom {
+// public:
 //    int day;              // current turn number (e.g., year)
 //    SocialClass peasants;
 //    SocialClass merchants;
@@ -253,7 +253,7 @@
 //    Resources resources;
 //    EventLog events;
 //    Population total;
-//
+
 //    // Constructor to initialize the kingdom with default starting values
 //    Kingdom() {
 //        day = 0;
@@ -288,19 +288,19 @@
 //        resources.stone = 50;
 //        resources.iron = 30;
 //        // Event log is already constructed (empty)
-//
+
 //        total.currentPopulation = peasants.population + merchants.population + nobles.population + army.soldiers;
 //    }
-//
+
 //    // Utility: add an event message to the log
 //    void addEvent(const char* msg) {
 //        events.add(msg);
 //    }
-//
+
 //    // The main turn update function which advances the simulation by one cycle
 //    void updateday() {
 //        day += 1;  // advance turn counter (could represent a year or season)
-//
+
 //        // 1. Resource Production (using peasants for labor)
 //        // Determine production from peasants. We'll allocate peasants' labor in fixed proportions:
 //        int p = peasants.population;
@@ -327,7 +327,7 @@
 //        resources.wood += woodProduced;
 //        resources.stone += stoneProduced;
 //        resources.iron += ironProduced;
-//
+
 //        // 2. Resource Consumption
 //        // Food consumption by population and army
 //        int totalPopulation = peasants.population + merchants.population + nobles.population;
@@ -372,7 +372,7 @@
 //            // Enough food, consume it
 //            resources.food -= foodNeeded;
 //        }
-//
+
 //        // Wood consumption (for heating/building) by population
 //        int woodNeeded = (int)(totalPopulation * 0.1f);  // e.g., 0.1 wood per person
 //        if (resources.wood < woodNeeded) {
@@ -390,7 +390,7 @@
 //        else {
 //            resources.wood -= woodNeeded;
 //        }
-//
+
 //        // Iron consumption for tool/weapon maintenance
 //        if (army.soldiers > 0) {
 //            int ironNeeded = (int)(army.soldiers * 0.1f);  // e.g., 0.1 iron per soldier per turn for upkeep
@@ -405,7 +405,7 @@
 //                resources.iron -= ironNeeded;
 //            }
 //        }
-//
+
 //        // 3. Economic Management (Tax collection and treasury update)
 //        // Calculate tax income from each class
 //        // We assume base annual income per person: peasant = 1, merchant = 3, noble = 0 (nobles might not pay taxes, or even cost money)
@@ -442,7 +442,7 @@
 //            army.morale += 1.0f;
 //            if (army.morale > 100.0f) army.morale = 100.0f;
 //        }
-//
+
 //        // 4. Military Training update
 //        army.training += 2.0f;  // each turn soldiers improve a bit
 //        if (army.training > 100.0f) army.training = 100.0f;
@@ -455,7 +455,7 @@
 //            army.morale += 0.5f; // morale gently rises if below average (time heals wounds)
 //            if (army.morale > 50.0f) army.morale = 50.0f;
 //        }
-//
+
 //        // 5. Population natural growth and decline
 //        // We'll use simple percentages for births and deaths
 //        float birthRate = 0.02f;   // 2% births
@@ -476,7 +476,7 @@
 //        if (nobles.population < 0) nobles.population = 0;
 //        totalPopulation = peasants.population + merchants.population + nobles.population;
 //        // (We could also enforce a housing limit: if wood and stone too low, limit peasants.population growth, but omitted for simplicity)
-//
+
 //        // Leader ages
 //        leader.age += 1;
 //        // Check natural death of leader
@@ -488,16 +488,16 @@
 //                char deathMsg[128];
 //                sprintf_s(deathMsg, "%s has died of old age at %d.", leader.title, leader.age);
 //                addEvent(deathMsg);
-//               
+              
 //            }
 //        }
-//
+
 //        // 6. Event Triggers
 //        // Prepare some random values for this turn
 //        int rand100 = rand() % 100;
 //        int rand100b = rand() % 100;
 //        bool eventOccurred = false;
-//
+
 //        // **War Event** (5% chance each turn, higher if army is large relative to pop)
 //        int warChance = 5;
 //        if (army.soldiers > peasants.population / 2) {
@@ -567,10 +567,10 @@
 //            else {
 //                sprintf_s(warMsg, sizeof(warMsg), "War: Defeat... We lost %d of %d soldiers.", soldierLoss, initialSoldiers);
 //            }
-//
+
 //            addEvent(warMsg);
 //        }
-//
+
 //        // **Plague Event** (e.g., 3% chance normally, higher after famine)
 //        int plagueChance = 3;
 //        // If a famine occurred recently (detected by a specific event message or a variable), increase chance. 
@@ -600,7 +600,7 @@
 //            // Log plague event
 //            addEvent("Plague: A deadly plague spreads, killing many across all classes.");
 //        }
-//
+
 //        // **Peasant Revolt Event** (triggered by very high peasant unrest)
 //        if (!eventOccurred && peasants.unrest > 90.0f) {
 //            eventOccurred = true;
@@ -635,7 +635,7 @@
 //                if (army.morale < 0.0f) army.morale = 0.0f;
 //            }
 //        }
-//
+
 //        // **Military Coup Event** (triggered by very low army morale)
 //        if (!eventOccurred && army.morale < 5.0f && army.soldiers > 0) {
 //            eventOccurred = true;
@@ -657,7 +657,7 @@
 //            // Army corruption might drop as the general cracks down on it
 //            army.corruption *= 0.5f;
 //        }
-//
+
 //        // **Corruption Audit Event** (trigger if corruption high)
 //        if (!eventOccurred && economy.corruption > 0.5f) {
 //            // 20% chance to conduct an audit if corruption above 50%
@@ -687,7 +687,7 @@
 //            economy.corruption -= 0.5f;
 //            if (economy.corruption < 0.0f) economy.corruption = 0.0f;
 //        }
-//
+
 //        // **Bankruptcy Event** (if debt too high)
 //        if (economy.debt > 500.0f) {
 //            addEvent("Bankruptcy: The kingdom defaults on its loans, causing financial chaos!");
@@ -701,7 +701,7 @@
 //            merchants.unrest += 15.0f; if (merchants.unrest > 100.0f) merchants.unrest = 100.0f;
 //            nobles.unrest += 5.0f; if (nobles.unrest > 100.0f) nobles.unrest = 100.0f;
 //        }
-//
+
 //        // Final safety clamps on values
 //        if (economy.gold < 0.0f) {
 //            economy.debt += (-economy.gold);
@@ -716,15 +716,15 @@
 //        if (army.training > 100.0f) army.training = 100.0f;
 //        if (army.corruption > 1.0f) army.corruption = 1.0f;
 //    }
-//};
-//
-//
-//
-//
-//
-//class RenderSystem {
-//
-//private:
+// };
+
+
+
+
+
+// class RenderSystem {
+
+// private:
 //    Building buildings[10];
 //    int buildingCount;
 //    Rectangle chiefPosition;
@@ -737,13 +737,13 @@
 //    string message;
 //    int  currentLevel = 1;
 //    Kingdom kingdom;
-//
-//
+
+
 //    Population population;
 //    Military military;
 //    Leadership leadership;
-//
-//public:
+
+// public:
 //    // update cheif movement
 //    void UpdateChiefMovement() {
 //        if (IsKeyPressed(KEY_RIGHT) && chiefPosition.x + gridSize < screenWidth) chiefPosition.x += gridSize;
@@ -751,8 +751,8 @@
 //        if (IsKeyPressed(KEY_DOWN) && chiefPosition.y + gridSize < screenHeight) chiefPosition.y += gridSize;
 //        if (IsKeyPressed(KEY_UP) && chiefPosition.y > 0) chiefPosition.y -= gridSize;
 //    }
-//
-//
+
+
 //    // building 0 menue display
 //    void menueB0(int option) {
 //        switch (option) {
@@ -804,49 +804,49 @@
 //            break;
 //        }
 //    }
-//
-//
+
+
 //    void DrawGrid() {
 //        for (int x = 0; x < screenWidth; x += gridSize)
 //            DrawLine(x, 0, x, screenHeight, LIGHTGRAY);
 //        for (int y = 0; y < screenHeight; y += gridSize)
 //            DrawLine(0, y, screenWidth, y, LIGHTGRAY);
 //    }
-//
+
 //    // anything like title on the corner 
 //    void Drawdiscription() const
 //    {
 //        std::string label = "test" + std::to_string(currentLevel);
-//
+
 //        int fontSize = 20;
 //        int textW = MeasureText(label.c_str(), fontSize);
 //        int textH = fontSize;
-//
+
 //        int padding = 8;
 //        int boxX = 10;
 //        int boxY = 10;
 //        int boxW = textW + padding * 2;
 //        int boxH = textH + padding * 2;
-//
+
 //        DrawRectangleRounded({ (float)boxX, (float)boxY,
 //                               (float)boxW, (float)boxH }, 0.25f, 8, DARKBROWN);
-//
-//
+
+
 //        int textX = boxX + padding;
 //        int textY = boxY + padding;
 //        DrawText(label.c_str(), textX, textY, fontSize, BEIGE);
 //    }
-//
+
 //    // DRAW BULIDINGS
 //    void DrawBuildings() {
 //        int spacing = gridSize * 3;
-//
+
 //        for (int i = 0; i < buildingCount; i++) {
 //            DrawRectangleRec({ buildings[i].rect.x + 5, buildings[i].rect.y + 5, gridSize, gridSize }, Fade(BLACK, 0.2f));
-//
+
 //            bool isNear = CheckCollisionRecs(chiefPosition, buildings[i].rect);
 //            Color drawColor = isNear ? GOLD : buildings[i].color;
-//
+
 //            if (buildings[i].name == "Castle") {
 //                DrawRectangleRec(buildings[i].rect, DARKGRAY);
 //                DrawRectangle(buildings[i].rect.x - 10, buildings[i].rect.y - 40, gridSize / 4, gridSize / 3, DARKGRAY);
@@ -855,7 +855,7 @@
 //                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY);
 //                DrawRectangle(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY);
 //            }
-//
+
 //            else if (buildings[i].name == "Barracks") {
 //                DrawRectangleRec(buildings[i].rect, RED);
 //                DrawRectangle(buildings[i].rect.x + 5, buildings[i].rect.y - 15, gridSize - 20, 15, RED);
@@ -864,7 +864,7 @@
 //                DrawRectangle(buildings[i].rect.x + gridSize - 40, buildings[i].rect.y + 10, 30, 15, LIGHTGRAY);
 //                DrawRectangle(buildings[i].rect.x + (gridSize / 2) - 20, buildings[i].rect.y + gridSize - 20, 40, 20, BROWN);
 //            }
-//
+
 //            else if (buildings[i].name == "Market") {
 //                DrawRectangleRec(buildings[i].rect, ORANGE);
 //                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 20, gridSize - 20, 20, ORANGE);
@@ -872,7 +872,7 @@
 //                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY);
 //                DrawRectangle(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY);
 //            }
-//
+
 //            else if (buildings[i].name == "Town Hall") {
 //                DrawRectangleRec(buildings[i].rect, BLUE);
 //                DrawRectangle(buildings[i].rect.x + gridSize / 3, buildings[i].rect.y - 30, gridSize / 3, 30, DARKBLUE);
@@ -882,7 +882,7 @@
 //                DrawRectangle(buildings[i].rect.x + 15, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY);
 //                DrawRectangle(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y + gridSize / 2, gridSize / 3, 15, LIGHTGRAY);
 //            }
-//
+
 //            else if (buildings[i].name == "Blacksmith") {
 //                DrawRectangleRec(buildings[i].rect, BROWN);
 //                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 15, gridSize - 20, 15, DARKBROWN);
@@ -890,7 +890,7 @@
 //                DrawRectangle(buildings[i].rect.x + 20, buildings[i].rect.y - 30, 10, 15, DARKBROWN);
 //                DrawRectangle(buildings[i].rect.x + (gridSize / 2) - 20, buildings[i].rect.y + gridSize - 20, 40, 20, BROWN);
 //            }
-//
+
 //            else if (buildings[i].name == "Church") {
 //                DrawRectangleRec(buildings[i].rect, PURPLE);
 //                DrawRectangle(buildings[i].rect.x + 10, buildings[i].rect.y - 15, gridSize - 20, 15, DARKPURPLE);
@@ -901,22 +901,22 @@
 //                DrawLine(buildings[i].rect.x + gridSize / 2, buildings[i].rect.y - 60, buildings[i].rect.x + gridSize / 2, buildings[i].rect.y - 75, WHITE);
 //                DrawLine(buildings[i].rect.x + gridSize / 2 - 10, buildings[i].rect.y - 67, buildings[i].rect.x + gridSize / 2 + 10, buildings[i].rect.y - 67, WHITE);
 //            }
-//
+
 //            DrawText(buildings[i].name.c_str(), buildings[i].rect.x + 5, buildings[i].rect.y + 35, 10, WHITE);
-//
+
 //            if (isNear) {
 //                DrawText(("Entered: " + buildings[i].name).c_str(), 10, 560, 18, MAROON);
 //            }
 //        }
-//
+
 //    }
-//
-//
-//
+
+
+
 //    static const Color SKIN;
 //    static const Color CLOAK;
 //    static const Color BELT;
-//
+
 //    // two characters of cheif
 //    void DrawChief2()
 //    {
@@ -924,14 +924,14 @@
 //        float headR = gridSize * 0.18f;
 //        float Heady = chiefPosition.y + 25;
 //        float Headx = chiefPosition.x + 50;
-//
+
 //        DrawCircle(Headx, Heady, headR, SKIN);
-//
+
 //        float crownX = Headx - 25;
 //        float crownY = chiefPosition.y + 5;
-//
+
 //        DrawRectangle(crownX, crownY, 50, 10, GOLD);
-//
+
 //        float spikeW = 10, spikeH = 12;
 //        for (int i = 0; i < 3; ++i)
 //        {
@@ -941,53 +941,53 @@
 //                { sx + spikeW * 0.5f, crownY - spikeH },
 //                GOLD);
 //        }
-//
+
 //        const Color BELT_CLR = GOLD;
 //        const Color BOOT_CLR = DARKBROWN;
-//
+
 //        float bodyW = 40, bodyH = 50;
 //        float bodyX = crownX + 5, bodyY = crownY + 35;
 //        DrawRectangle(bodyX, bodyY, bodyW, bodyH, BLACK);
-//
+
 //        float beltH = bodyH * 0.14f;
 //        DrawRectangle(bodyX, bodyY + bodyH * 0.45f, bodyW, beltH, BELT_CLR);
-//
+
 //        float armW = gridSize * 0.12f, armH = gridSize * 0.30f;
 //        float armY = bodyY + bodyH * 0.15f;
-//
+
 //        DrawRectangle(bodyX - armW, armY, armW, armH, BLACK);
 //        DrawRectangle(bodyX + bodyW, armY, armW, armH, BLACK);
-//
+
 //        float legW = gridSize * 0.12f, legH = gridSize * 0.28f;
 //        float legY = bodyY + bodyH;
-//
+
 //        DrawRectangle(bodyX + bodyW * 0.15f, legY, legW, legH, BOOT_CLR);
 //        DrawRectangle(bodyX + bodyW * 0.73f, legY, legW, legH, BOOT_CLR);
-//
+
 //        float swordHandleX = bodyX + bodyW + armW * 0.5f;
 //        float swordHandleY = armY - gridSize * 0.04f;
 //        float handleH = gridSize * 0.10f;
 //        float bladeH = gridSize * 0.50f;
 //        float bladeW = 4.0f;
-//
+
 //        DrawRectangle(swordHandleX - bladeW * 0.5f,
 //            swordHandleY,
 //            bladeW,
 //            handleH,
 //            BROWN);
-//
+
 //        DrawRectangle(swordHandleX - 10,
 //            swordHandleY,
 //            20,
 //            3,
 //            GOLD);
-//
+
 //        DrawRectangle(swordHandleX - bladeW * 0.5f,
 //            swordHandleY - bladeH,
 //            bladeW,
 //            bladeH,
 //            LIGHTGRAY);
-//
+
 //        DrawCircle(swordHandleX, swordHandleY + handleH, 3, GOLD);
 //    }
 //    void pixelCheif() {
@@ -997,9 +997,9 @@
 //        Texture2D chieftex = LoadTextureFromImage(chiefimage); // Convert image to texture
 //        UnloadImage(chiefimage);  // We no longer need the image after converting it to a texture
 //        DrawTexture(chieftex, chiefx, chiefy, WHITE);
-//
+
 //    }
-//
+
 //    void drawtree() {
 //        int treex = 900;
 //        int treey = 20;
@@ -1011,24 +1011,24 @@
 //        DrawTexture(treetex, 1100, 10, WHITE);
 //        DrawTexture(treetex, 600, 500, WHITE);
 //        DrawTexture(treetex, 1100, 500, WHITE);
-//
-//
+
+
 //    }
-//
+
 //    void DrawChief() {
-//
-//
+
+
 //        float headR = gridSize * 0.18;
 //        float Heady = chiefPosition.y + 25;
 //        float Headx = chiefPosition.x + 50;
-//
+
 //        DrawCircle(Headx, Heady, headR, SKIN);
-//
+
 //        float crownX = Headx - 25;
 //        float crownY = chiefPosition.y + 5;
-//
+
 //        DrawRectangle(crownX, crownY, 50, 10, GOLD);
-//
+
 //        float spikeW = 10;
 //        float spikeH = 12;
 //        for (int i = 0; i < 3; ++i)
@@ -1037,55 +1037,55 @@
 //            float sx = crownX + spikeW * (2 * i);
 //            DrawTriangle({ sx,crownY }, { sx + spikeW,crownY }, { sx + spikeW * 0.5f, crownY - spikeH }, GOLD);
 //        }
-//
-//
+
+
 //        float bodyW = 40;
 //        float bodyH = 50;
 //        float bodyX = crownX + 5;
 //        float bodyY = crownY + 35;
 //        DrawRectangle(bodyX, bodyY, bodyW, bodyH, RED);
-//
+
 //        float beltH = bodyH * 0.14;
 //        DrawRectangle(bodyX, bodyY + bodyH * 0.45, bodyW, beltH, BELT);
-//
-//
+
+
 //        float armW = gridSize * 0.12;
 //        float armH = gridSize * 0.30;
 //        float armY = bodyY + bodyH * 0.15;
-//
+
 //        DrawRectangle(bodyX - armW, armY, armW, armH, RED);
 //        DrawRectangle(bodyX + bodyW, armY, armW, armH, RED);
-//
-//
+
+
 //        float legW = gridSize * 0.12;
 //        float legH = gridSize * 0.28;
 //        float legY = bodyY + bodyH;
-//
+
 //        DrawRectangle(bodyX + bodyW * 0.15, legY, legW, legH, DARKBROWN);
 //        DrawRectangle(bodyX + bodyW * 0.73, legY, legW, legH, DARKBROWN);
-//
-//
+
+
 //        float sceptreX1 = bodyX + bodyW + armW * 0.5;
 //        float sceptreY1 = armY - gridSize * 0.10;
 //        float sceptreY2 = sceptreY1 + gridSize * 0.65;
 //        DrawLineEx({ sceptreX1, sceptreY1 }, { sceptreX1, sceptreY2 }, 4, GOLD);
 //        DrawCircle(sceptreX1, sceptreY1, 6, YELLOW);
-//
+
 //    }
-//
-//
-//
-//
-//
+
+
+
+
+
 //    void background() {
 //        for (int y = 0; y < screenHeight; y++) {
 //            DrawLine(0, y, screenWidth, y, GRAY);
 //        }
 //    }
-//
-//
+
+
 //    RenderSystem() {}
-//
+
 //    // initialization of the builind dimensions / name / color 
 //    // Chief starting position
 //    // population military leadership initialization
@@ -1095,79 +1095,79 @@
 //        gridSize = 100; // size of each block
 //        InitWindow(screenWidth, screenHeight, "Stronghold");
 //        SetTargetFPS(60);
-//
+
 //        // Chief starting position
 //        chiefPosition = { 1000,500 , (float)gridSize, (float)gridSize };
-//
+
 //        buildingCount = 7;
 //        const int x = 8;
 //        const int y =3;
-//
+
 //        // initialization of the builind dimensions / name / color 
 //        buildings[0] = { "Castle",
-//
+
 //            {(float)(x * gridSize), // rect.x
 //            (float)(y * gridSize),  //rect.y
 //            (float)gridSize,
 //            (float)gridSize},
 //            DARKGRAY };
-//
+
 //        buildings[1] = { "Barracks", {(float)((x - 1) * gridSize - 70), (float)((y - 1) * gridSize), (float)gridSize, (float)gridSize}, RED };
 //        buildings[2] = { "Market", {(float)((x + 1) * gridSize + 70), (float)((y - 1) * gridSize), (float)gridSize, (float)gridSize}, ORANGE };
 //        buildings[3] = { "Granary", {(float)((x - 1) * gridSize - 70), (float)((y + 1) * gridSize), (float)gridSize, (float)gridSize}, RED };
 //        buildings[4] = { "Town Hall", {(float)((x + 1) * gridSize + 70), (float)((y + 1) * gridSize), (float)gridSize, (float)gridSize}, BLUE };
 //        buildings[5] = { "Blacksmith", {(float)(x * gridSize), (float)((y - 2) * gridSize + 40), (float)gridSize, (float)gridSize}, BROWN };
 //        buildings[6] = { "Church", {(float)(x * gridSize), (float)((y + 2) * gridSize - 40), (float)gridSize, (float)gridSize}, PURPLE };
-//
-//
-//
+
+
+
 //        population = Population(500, 70, 100);
 //        military = Military(200, 80, 100, 10, 1000, 50);
 //        leadership = Leadership(75);
-//
+
 //        std::srand(std::time(nullptr));
 //    }
-//
+
 //    // notice board window
 //    void DrawSideWindow() {
 //        int sideWindowWidth = 600;
 //        int sideWindowHeight = screenHeight; //700
 //        int sideWindowX = 0;
 //        int sideWindowY = 0;
-//
+
 //        DrawRectangle(sideWindowX, sideWindowY, sideWindowWidth, sideWindowHeight, DARKGRAY);
-//
+
 //        DrawText("Notices", sideWindowX + 10, sideWindowY + 10, 20, WHITE);
-//
-//
+
+
 //    }
 //    void pixelbackground() {
 //        int sideWindowX = 0;
 //        int sideWindowY = 0;
-//
+
 //        int chiefx = 0;
 //        int chiefy = 0;
 //        Image chiefimage = LoadImage("back.PNG");
 //        Texture2D chieftex = LoadTextureFromImage(chiefimage); // Convert image to texture
 //        UnloadImage(chiefimage);  // We no longer need the image after converting it to a texture
 //        DrawTexture(chieftex, chiefx, chiefy, WHITE);
-//
-//
+
+
 //    }
 //    // call functions and check the collision of building and the cheif
 //    void  Run() {
-//
+
 //        int selectedOption = 0;
 //        while (!WindowShouldClose()) {
-//
+
 //            if (IsKeyPressed(KEY_SPACE)) {
 //                kingdom.updateday();
 //            }
 //            UpdateChiefMovement();
-//
-//
-//
-//
+
+
+
+
 //            BeginDrawing();
 //            ClearBackground(SKYBLUE);
 //            background();
@@ -1179,20 +1179,20 @@
 //            Drawdiscription();
 //            //DrawSideWindow();
 //            drawtree();
-//
+
 //            ClearBackground(RAYWHITE);
-//
+
 //            // Prepare some colors for different texts
 //            Color titleColor = GREEN;
 //            Color statColor = GOLD;
 //            Color warnColor = RED;
 //            Color goodColor = DARKGREEN;
 //            Color neutralColor = YELLOW;
-//
+
 //            DrawText(TextFormat("DAY:", kingdom.day),1200, 10, 20, titleColor);
 //            DrawText(TextFormat("DAY: ", kingdom.leader.title, kingdom.leader.age),
 //                200, 10, 20, titleColor);
-//
+
 //            // Display Population of each class
 //            DrawText("Population:", 10, 50, 18, titleColor);
 //            DrawText(TextFormat("Peasants: %d", kingdom.peasants.population),
@@ -1205,7 +1205,7 @@
 //            DrawText(TextFormat("Unrest - Peasants: %.0f%%, Merchants: %.0f%%, Nobles: %.0f%%",
 //                kingdom.peasants.unrest, kingdom.merchants.unrest, kingdom.nobles.unrest),
 //                30, 130, 16, (kingdom.peasants.unrest > 50 || kingdom.merchants.unrest > 50 || kingdom.nobles.unrest > 50) ? warnColor : statColor);
-//
+
 //            // Display Resources
 //            DrawText("Resources:", 10, 170, 18, titleColor);
 //            DrawText(TextFormat("Food: %d", kingdom.resources.food), 30, 190, 18,
@@ -1215,7 +1215,7 @@
 //            DrawText(TextFormat("Stone: %d", kingdom.resources.stone), 270, 190, 18, neutralColor);
 //            DrawText(TextFormat("Iron: %d", kingdom.resources.iron), 390, 190, 18,
 //                (kingdom.resources.iron < kingdom.army.soldiers * 1) ? warnColor : neutralColor);
-//
+
 //            // Display Economy
 //            DrawText("Economy:", 10, 230, 18, titleColor);
 //            DrawText(TextFormat("Gold: %.1f", kingdom.economy.gold), 30, 250, 18,
@@ -1227,7 +1227,7 @@
 //                (kingdom.economy.inflation > 0.3f) ? warnColor : neutralColor);
 //            DrawText(TextFormat("Corruption: %.0f%%", kingdom.economy.corruption * 100), 370, 270, 18,
 //                (kingdom.economy.corruption > 0.5f) ? warnColor : neutralColor);
-//
+
 //            // Display Military
 //            DrawText("Military:", 10, 310, 18, titleColor);
 //            DrawText(TextFormat("Soldiers: %d", kingdom.army.soldiers), 30, 330, 18,
@@ -1238,7 +1238,7 @@
 //                (kingdom.army.morale < 30.0f) ? warnColor : neutralColor);
 //            DrawText(TextFormat("Army Corruption: %.0f%%", kingdom.army.corruption * 100),
 //                30, 350, 18, (kingdom.army.corruption > 0.3f) ? warnColor : neutralColor);
-//
+
 //            // Display recent Event Log
 //            DrawText("Recent Events:", 10, 390, 18, titleColor);
 //            int evCount = kingdom.events.count;
@@ -1249,17 +1249,17 @@
 //            if (evCount == 0) {
 //                DrawText("No significant events yet.", 30, 410, 16, statColor);
 //            }
-//
+
 //            // Draw instruction
 //            DrawText("Press SPACE to advance turn", 10, 560, 16, WHITE);
-//
-//
+
+
 //            if (CheckCollisionRecs(chiefPosition, buildings[0].rect)) {
 //                DrawText(" Menu", screenWidth - 280, 250, 20, GOLD);
 //                DrawText("1. Display Military", screenWidth - 280, 275, 20, WHITE);
 //                DrawText("2. Display Population", screenWidth - 280, 300, 20, WHITE);
 //                DrawText("3. View Leadership", screenWidth - 280, 325, 20, WHITE);
-//
+
 //                if (IsKeyPressed(KEY_A)) {
 //                    selectedOption = 1;
 //                }
@@ -1269,16 +1269,16 @@
 //                if (IsKeyPressed(KEY_C)) {
 //                    selectedOption = 3;
 //                }
-//
+
 //                menueB0(selectedOption);
 //            }
-//
+
 //            if (CheckCollisionRecs(chiefPosition, buildings[1].rect)) {
 //                DrawText("Option Menu", screenWidth - 280, 250, 20, GOLD);
 //                DrawText("A. Train Military", screenWidth - 280, 275, 20, WHITE);
 //                DrawText("B. display military", screenWidth - 280, 300, 20, WHITE);
 //                DrawText("C. Recruit military", screenWidth - 280, 325, 20, WHITE);
-//
+
 //                if (IsKeyPressed(KEY_A)) {
 //                    selectedOption = 1;
 //                }
@@ -1295,7 +1295,7 @@
 //                DrawText("1. View Leadership", screenWidth - 280, 275, 20, WHITE);
 //                DrawText("2. Start Election", screenWidth - 280, 300, 20, WHITE);
 //                DrawText("3. Handle Coup", screenWidth - 280, 325, 20, WHITE);
-//
+
 //                if (IsKeyPressed(KEY_A)) {
 //                    selectedOption = 1;
 //                }
@@ -1305,25 +1305,25 @@
 //                if (IsKeyPressed(KEY_C)) {
 //                    selectedOption = 3;
 //                }
-//
+
 //                menueB2(selectedOption);
 //            }
-//
-//
+
+
 //            EndDrawing();
 //        }
 //        CloseWindow();
 //    }
-//};
-//
-//
-//const Color RenderSystem::SKIN = { 255, 224, 189, 255 };
-//const Color RenderSystem::CLOAK = { 128,  32,  96, 255 };
-//const Color RenderSystem::BELT = { 60,  30,   0, 255 };
-//
-//int main() {
+// };
+
+
+// const Color RenderSystem::SKIN = { 255, 224, 189, 255 };
+// const Color RenderSystem::CLOAK = { 128,  32,  96, 255 };
+// const Color RenderSystem::BELT = { 60,  30,   0, 255 };
+
+// int main() {
 //    RenderSystem renderer;
 //    renderer.Init();
 //    renderer.Run();
 //    return 0;
-//}
+// }

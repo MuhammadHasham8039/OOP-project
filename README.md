@@ -1,4 +1,4 @@
-hi wordl
+
 BARACK:
 training
 recruitment
@@ -7,7 +7,8 @@ dsiplay inventroy
 
 CASTLE:
 payment to soldiers
-interactions with other kingdoms
+interactions with other kingdoms between wars to reduce the threat of wars
+display current leader policies abilities 
 
 CHURCH:
 nobles meeting 

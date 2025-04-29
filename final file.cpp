@@ -76,6 +76,9 @@
      int morale;
      float training; // percentage of training skills
      int pay;
+     int swords;
+     int arrows;
+     int armours;
      int corruption;
      int costToTrain = 10;
      int trainCoins;
@@ -84,6 +87,15 @@
      Military() : message("") {}
      Military(int soldiersCount, int morale, int pay, int corruption, int trainCoins, int training)
          :training(training), trainCoins(trainCoins), soldiers(soldiersCount), morale(morale), pay(pay), corruption(corruption) {}
+
+     void displayinventory()
+     {
+         cout << soldiers << " Soldiers.\n";
+         cout << swords << " Swords.\n";
+         cout << arrows << " Arrows.\n";
+         cout << armours << " Armours.\n";
+
+     }
 
      void Recruit(int population, int x, int y) {
          // recruit 10 percent of the population on call
@@ -261,6 +273,9 @@
      EventLog events;
      Population total;
 
+     // **War Event** (5% chance each turn, higher if army is large relative to population)
+     int warChance = 5;
+
      // Constructor to initialize the kingdom with default starting values
      Kingdom() {
          day = 0;
@@ -283,7 +298,7 @@
          army.morale = 80.0f;         // fairly high morale initially
          army.corruption = 0.0f;      // discipline initially (no corruption yet)
          // Economy
-         economy.gold = 100.0f;       // initial treasury gold
+         economy.gold = 500.0f;       // initial treasury gold
          economy.debt = 0.0f;
          economy.taxRate = 1.0f;      // normal tax rate (100%)
          economy.inflation = 0.0f;
@@ -291,9 +306,9 @@
          economy.corruption = 0.1f;   // some baseline corruption (10%)
          // Resources
          resources.food = 200;        // food reserves
-         resources.wood = 100;
+         resources.wood = 150;
          resources.stone = 50;
-         resources.iron = 30;
+         resources.iron = 130;
          // Event log is already constructed (empty)
 
          total.currentPopulation = peasants.population + merchants.population + nobles.population + army.soldiers;
@@ -506,8 +521,6 @@
          int rand100b = rand() % 100;
          bool eventOccurred = false;
 
-         // **War Event** (5% chance each turn, higher if army is large relative to pop)
-         int warChance = 5;
          if (army.soldiers > peasants.population / 2) {
              // If the army is very large (e.g., militaristic or preparing war), maybe war chance increases
              warChance += 5;
@@ -750,6 +763,7 @@
      Population population;
      Military military;
      Leadership leadership;
+    // Military army;
 
  public:
      void SelectKingSkin() {
@@ -1210,11 +1224,78 @@
      {
             //Drwa Castle Menu
          DrawText("Castle Menu", 20, 530, 20, RED);
-         DrawText("1. Buy food (10 gold → 10 food)", 20, 555, 20, BLACK);
-         DrawText("2. Trade Wood for Food (10 wood → ? food)", 20, 580, 20, BLACK);
-         DrawText("3. Trade Iron for Gold (10 iron → ? gold)", 20, 605, 20, BLACK);
+         DrawText("1. Soldiers Salaries (1 gold → 1 soldier)", 20, 555, 20, BLACK);
+         DrawText("2. Diplometic Relations", 20, 580, 20, BLACK);
+         DrawText("3. King's Policies", 20, 605, 20, BLACK);
          DrawText("4. Exit Castle", 20, 630, 20, BLACK);
          DrawText("Select an option (1-4):", 20, 655, 20, BLACK);
+
+         if (IsKeyPressed(KEY_ONE)) 
+         {
+             if (kingdom.economy.gold >= military.soldiers) 
+             {
+                 kingdom.economy.gold -= military.soldiers;
+                 cout << "   - Executed: Soldiers salaries have been paid.\n";
+             }
+             else 
+             {
+                 cout << "   - Not enough gold to pay salaries.\n";
+                 military.soldiers -= military.soldiers - kingdom.economy.gold;
+                 kingdom.peasants.population += military.soldiers - kingdom.economy.gold;
+                 kingdom.economy.gold -= military.soldiers - kingdom.economy.gold;
+                 military.morale -= 3;
+                 kingdom.nobles.unrest -= 3;
+             }
+         }
+         else if (IsKeyPressed(KEY_TWO)) 
+         {
+
+             //Diplometic Relations
+
+             //int trade_wood = 10;
+             //if (kingdom.resources.wood >= trade_wood) {
+             //    int food_gained = 10;  // Balanced supply: 10 wood → 10 food
+             //    if (kingdom.resources.food < kingdom.resources.wood) {
+             //        food_gained = 20;  // Food is scarce, wood is plentiful: 10 wood trades for 20 food
+             //    }
+             //    else if (kingdom.resources.wood < kingdom.resources.food) {
+             //        food_gained = 5;   // Wood is scarce, food is abundant: 10 wood trades for 5 food
+             //    }
+             //    kingdom.resources.wood -= trade_wood;
+             //    kingdom.resources.food += food_gained;
+             //    cout << "   - Executed: Traded " << trade_wood << " wood for " << food_gained << " food.\n";
+             //}
+             //else {
+             //    cout << "   - Not enough wood to trade for food.\n";
+             //}
+         }
+         else if (IsKeyPressed(KEY_THREE)) 
+         {
+
+             //KING's Policies
+
+             //int trade_iron = 10;
+             //if (kingdom.resources.iron >= trade_iron) {
+             //    int gold_gained = 10;  // Balanced supply: 10 iron → 10 gold
+             //    if (kingdom.economy.gold < kingdom.resources.iron) {
+             //        gold_gained = 20;  // Gold is scarce, iron is plentiful: 10 iron trades for 20 gold
+             //    }
+             //    else if (kingdom.resources.iron < kingdom.economy.gold) {
+             //        gold_gained = 5;   // Iron is scarce, gold is abundant: 10 iron trades for 5 gold
+             //    }
+             //    kingdom.resources.iron -= trade_iron;
+             //    kingdom.economy.gold += gold_gained;
+             //    cout << "   - Executed: Traded " << trade_iron << " iron for " << gold_gained << " gold.\n";
+             //}
+             //else {
+             //    cout << "   - Not enough iron to trade for gold.\n";
+             //}
+         }
+         else if (IsKeyPressed(KEY_FOUR)) 
+         {
+             //EXIT CASTLE
+         }
+
      }
 
      void barrackmenue()
@@ -1224,8 +1305,54 @@
          DrawText("1. Train Troops (10 gold → 10 soldiers)", 20, 555, 20, BLACK);
          DrawText("2. Get Equipment (10 gold → 15 arrows)", 20, 580, 20, BLACK);
          DrawText("3. Resruit Slodiers (10 gold → 10 soldiers)", 20, 605, 20, BLACK);
-         DrawText("4. Exit Barrack", 20, 630, 20, BLACK);
-         DrawText("Select an option (1-4):", 20, 655, 20, BLACK);
+         DrawText("4. Inventory Display ", 20, 605, 20, BLACK);
+         DrawText("5. Exit Barrack", 20, 655, 20, BLACK);
+         DrawText("Select an option (1-5):", 20, 680, 20, BLACK);
+
+         if (IsKeyPressed(KEY_ONE))
+         {
+             if (kingdom.economy.gold >= military.soldiers)
+             {
+                 kingdom.economy.gold -= military.soldiers;
+                 // kingdom.resources.food += 10;
+                 cout << "   - Executed: Soldiers training successful.\n";
+             }
+             else
+             {
+                 cout << "   - Not enough gold to train the soldiers.\n";
+                /* army.soldiers -= army.soldiers - kingdom.economy.gold;
+                 kingdom.peasants.population += army.soldiers - kingdom.economy.gold;
+                 kingdom.economy.gold -= army.soldiers - kingdom.economy.gold;*/
+                 military.morale -= 5;
+                // kingdom.nobles.unrest -= 3;
+             }
+         }
+         else if (IsKeyPressed(KEY_TWO))
+         {
+            //BUY EQUIPMENT
+         }
+         else if (IsKeyPressed(KEY_THREE))
+         {
+
+             int recruits = 0;
+             if (kingdom.warChance > 50) {
+                 recruits = kingdom.peasants.population / 5;
+                 military.soldiers += recruits;
+                 cout << "   - Executed: " << recruits << " soldiers added to Military.\n";
+             }
+             else {
+                 cout << "   - Not enough population to recruit soldiers.\n";
+             }
+         }
+         else if (IsKeyPressed(KEY_FOUR))
+         {
+             military.displayinventory();
+         }
+         else if (IsKeyPressed(KEY_FIVE))
+         {
+             //EXIT BARRACK
+         }
+
      }
 
      void blacksmithmenue()
@@ -1234,20 +1361,145 @@
          DrawText("Blacksmith Menu", 20, 530, 20, RED);
          DrawText("1. Forge Swords (10 iron → 5 swords)", 20, 555, 20, BLACK);
          DrawText("2. Forge Arrows (10 wood → 5 arrows)", 20, 580, 20, BLACK);
-         DrawText("3. Buy Weapons (10 gold → 5 swords)", 20, 605, 20, BLACK);
+         DrawText("3. Forge Armours (10 iron → 2 Armours)", 20, 605, 20, BLACK);
          DrawText("4. Exit Blacksmith", 20, 630, 20, BLACK);
          DrawText("Select an option (1-4):", 20, 655, 20, BLACK);
+
+         if (IsKeyPressed(KEY_ONE))
+         {
+             if (kingdom.resources.iron >= 10)
+             {
+                 kingdom.resources.iron -= 10;
+                 military.swords += 5;  
+                 cout << "   - Executed: Swords forged successfully.\n";
+             }
+             else
+             {
+                 cout << "   - Not enough iron to forge Swords.\n";
+                /* military.soldiers -= military.soldiers - kingdom.economy.gold;
+                 kingdom.peasants.population += military.soldiers - kingdom.economy.gold;
+                 kingdom.economy.gold -= military.soldiers - kingdom.economy.gold;
+                 military.morale -= 3;
+                 kingdom.nobles.unrest -= 3;*/
+             }
+         }
+         else if (IsKeyPressed(KEY_TWO))
+         {
+             if (kingdom.resources.wood >= 10)
+             {
+                 kingdom.resources.wood -= 10;
+                 military.arrows += 5;
+                 cout << "   - Executed: Arrows forged successfully.\n";
+             }
+             else
+             {
+                 cout << "   - Not enough wood to forge Arrows.\n";
+                 /* military.soldiers -= military.soldiers - kingdom.economy.gold;
+                  kingdom.peasants.population += military.soldiers - kingdom.economy.gold;
+                  kingdom.economy.gold -= military.soldiers - kingdom.economy.gold;
+                  military.morale -= 3;
+                  kingdom.nobles.unrest -= 3;*/
+             }
+         }
+         else if (IsKeyPressed(KEY_THREE))
+         {
+             if (kingdom.resources.iron >= 10)
+             {
+                 kingdom.resources.iron -= 10;
+                 military.armours = 2;
+                 cout << "   - Executed: armour forged successfully.\n";
+             }
+             else
+             {
+                 cout << "   - Not enough iron to forge armour.\n";
+                 /* military.soldiers -= military.soldiers - kingdom.economy.gold;
+                  kingdom.peasants.population += military.soldiers - kingdom.economy.gold;
+                  kingdom.economy.gold -= military.soldiers - kingdom.economy.gold;
+                  military.morale -= 3;
+                  kingdom.nobles.unrest -= 3;*/
+             }
+         }
+         else if (IsKeyPressed(KEY_FOUR))
+         {
+             //EXIT BlackSmith
+         }
+
      }
 
      void churchmenue()
      {
-         //Draw Barrack Menu
+         //Draw Church Menu
          DrawText("Church Menu", 20, 530, 20, RED);
          DrawText("1. Noble Meeting (unrest -= 5)", 20, 555, 20, BLACK);
          DrawText("2. War negotiations (morale += 10)", 20, 580, 20, BLACK);
          DrawText("3. Worship (unrest -= 2 && morale += 5)", 20, 605, 20, BLACK);
          DrawText("4. Exit Church", 20, 630, 20, BLACK);
          DrawText("Select an option (1-4):", 20, 655, 20, BLACK);
+
+         if (IsKeyPressed(KEY_ONE))
+         {
+             if (leadership.approvalRating < 50)
+             {
+                 leadership.approvalRating += 10;
+                 kingdom.nobles.unrest -= 10;
+                 kingdom.peasants.unrest -= 10;
+                 kingdom.merchants.unrest -= 10;
+             }
+             else
+             {
+                 cout << "   - No need for Noble Meeting.\n";
+                 /* military.soldiers -= military.soldiers - kingdom.economy.gold;
+                  kingdom.peasants.population += military.soldiers - kingdom.economy.gold;
+                  kingdom.economy.gold -= military.soldiers - kingdom.economy.gold;
+                  military.morale -= 3;
+                  kingdom.nobles.unrest -= 3;*/
+             }
+         }
+         else if (IsKeyPressed(KEY_TWO))
+         {
+             if (kingdom.warChance > 50)
+             {
+                 cout << "War Negotiations under way!\n";
+                 if (rand() %4==4)
+                 {
+                     cout << "Negotiations unsuccessful!\n";
+                     leadership.approvalRating -= 10;
+                     kingdom.nobles.unrest += 10;
+                     kingdom.peasants.unrest += 10;
+                     kingdom.merchants.unrest += 10;
+                 }
+                 else
+                 {
+                     cout << "Negotiations successful!\n";
+                     leadership.approvalRating += 10;
+                     kingdom.nobles.unrest -= 10;
+                     kingdom.peasants.unrest -= 10;
+                     kingdom.merchants.unrest -= 10;
+                 }
+             }
+             else
+             {
+                 cout << "   - No War Negotiations in progress.\n";
+                 /* military.soldiers -= military.soldiers - kingdom.economy.gold;
+                  kingdom.peasants.population += military.soldiers - kingdom.economy.gold;
+                  kingdom.economy.gold -= military.soldiers - kingdom.economy.gold;
+                  military.morale -= 3;
+                  kingdom.nobles.unrest -= 3;*/
+             }
+         }
+         else if (IsKeyPressed(KEY_THREE))
+         {
+             leadership.approvalRating += 2;
+             kingdom.nobles.unrest -= 3;
+             kingdom.peasants.unrest -= 3;
+             kingdom.merchants.unrest -= 3;
+             military.morale += 5;
+         }
+         else if (IsKeyPressed(KEY_FOUR))
+         {
+             //EXIT BlackSmith
+         }
+
      }
 
      void marketmenue() {
@@ -1413,7 +1665,7 @@
 
                  castlemenue();
 
-                 if (IsKeyPressed(KEY_A)) {
+                 /*if (IsKeyPressed(KEY_A)) {
                      selectedOption = 1;
                  }
                  if (IsKeyPressed(KEY_B)) {
@@ -1423,7 +1675,7 @@
                      selectedOption = 3;
                  }
 
-                 menueB0(selectedOption);
+                 menueB0(selectedOption);*/
              }
 
              if (CheckCollisionRecs(chiefPosition, buildings[1].rect)) {
@@ -1432,7 +1684,7 @@
 
                  barrackmenue();
 
-                 if (IsKeyPressed(KEY_A)) {
+                /* if (IsKeyPressed(KEY_A)) {
                      selectedOption = 1;
                  }
                  if (IsKeyPressed(KEY_B)) {
@@ -1440,7 +1692,7 @@
                  }
                  if (IsKeyPressed(KEY_C)) {
                      selectedOption = 3;
-                 }
+                 }*/
              }
              if (CheckCollisionRecs(chiefPosition, buildings[5].rect)) {
                  DrawText("OPTION MENUE", 20, 550, 20, GOLD);
@@ -1492,7 +1744,8 @@
  const Color RenderSystem::CLOAK = { 128,  32,  96, 255 };
  const Color RenderSystem::BELT = { 60,  30,   0, 255 };
 
- int main() {
+ int main() 
+ {
      RenderSystem renderer;
      renderer.Init();
      renderer.MainMenu();

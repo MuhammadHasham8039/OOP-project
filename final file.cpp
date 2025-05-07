@@ -840,41 +840,31 @@ private:
     string messagemenue;
     int  currentLevel = 1;
     Kingdom kingdom;
+    Kingdom newKingdom;
     Population population;
     Military military;
     Leadership leadership;
-    // Military army;
     vector<Kingdom> additionalKingdoms;
-    int currentKingdomIndex = -1; // -1 means main kingdom, 0+ means additional kingdoms
+    int currentKingdomIndex = -1; 
 
-    // Add texture for the chief in new kingdom
     Texture2D newKingdomChiefTexture;
     bool newKingdomChiefTextureLoaded = false;
 public:
-    // Add a method to load the new chief texture
     void LoadNewKingdomChiefTexture() {
         if (!newKingdomChiefTextureLoaded) {
-            // Check if file exists
-            if (FileExists("kingc2.png")) {
-                Image chiefImage = LoadImage("kingc2.png");
+            if (FileExists("king50.png")) {
+                Image chiefImage = LoadImage("king50.png");
                 if (chiefImage.data != NULL) {
                     newKingdomChiefTexture = LoadTextureFromImage(chiefImage);
                     UnloadImage(chiefImage);
                     newKingdomChiefTextureLoaded = true;
                 }
-                else {
-                    // Handle error - image failed to load
-                    printf("Failed to load chief image\n");
-                }
+                
             }
-            else {
-                // Handle error - file doesn't exist
-                printf("Chief image file not found\n");
-            }
+           
         }
     }
 
-    // Add a method to unload the texture
     void UnloadNewKingdomChiefTexture() {
         if (newKingdomChiefTextureLoaded) {
             UnloadTexture(newKingdomChiefTexture);
@@ -882,7 +872,6 @@ public:
         }
     }
 
-    // Update the new kingdom chief movement
     void UpdateNewKingdomChiefMovement() {
         if (IsKeyPressed(KEY_RIGHT) && newKingdomChiefPosition.x + gridSize < screenWidth)
             newKingdomChiefPosition.x += gridSize;
@@ -894,93 +883,72 @@ public:
             newKingdomChiefPosition.y -= gridSize;
     }
 
-    // Update the newwindow method to include chief movement
-    // Add new buildings for the new kingdom
+   
     Building newKingdomBuildings[5];
 
     void InitNewKingdomBuildings() {
-        // Initialize buildings for the new kingdom
         newKingdomBuildings[0] = { "New Castle", {150, 150, (float)gridSize, (float)gridSize}, DARKGRAY };
-        newKingdomBuildings[1] = { "New Barracks", {350, 250, (float)gridSize, (float)gridSize}, RED };
+        newKingdomBuildings[1] = { "New Barrack", {350, 250, (float)gridSize, (float)gridSize}, RED };
         newKingdomBuildings[2] = { "New Market", {550, 350, (float)gridSize, (float)gridSize}, ORANGE };
         newKingdomBuildings[3] = { "New Blacksmith", {200, 350, (float)gridSize, (float)gridSize}, BROWN };
         newKingdomBuildings[4] = { "New Church", {450, 150, (float)gridSize, (float)gridSize}, PURPLE };
     }
 
-    void DrawNewKingdomBuildings() {
-        for (int i = 0; i < 5; i++) {
-            bool isNear = CheckCollisionRecs(newKingdomChiefPosition, newKingdomBuildings[i].rect);
-            Color drawColor = isNear ? GOLD : newKingdomBuildings[i].color;
-
-            DrawRectangleRec(newKingdomBuildings[i].rect, drawColor);
-            DrawText(newKingdomBuildings[i].name.c_str(),
-                newKingdomBuildings[i].rect.x + 5,
-                newKingdomBuildings[i].rect.y + gridSize + 5,
-                12, WHITE);
-
-            if (isNear) {
-                DrawText(("Entered: " + newKingdomBuildings[i].name).c_str(),
-                    10, 480, 18, MAROON);
-            }
-        }
-    }
-
-    void HandleNewKingdomBuildingInteractions(Kingdom& currentKingdom) {
-        // Check for collision with buildings and handle interactions
+    // managing the collision of king with buildings and showing the menue
+    void newkingdomcollisions() {
         for (int i = 0; i < 5; i++) {
             if (CheckCollisionRecs(newKingdomChiefPosition, newKingdomBuildings[i].rect)) {
                 // Different menus based on building type
                 if (newKingdomBuildings[i].name == "New Castle") {
-                    DrawText("New Castle Menu", 20, 530, 20, RED);
-                    DrawText("1. Check Kingdom Status", 20, 555, 20, BLACK);
-                    DrawText("2. Change Leadership Style", 20, 580, 20, BLACK);
+                    DrawText("Qila Menu", 20, 530, 20, RED);
+                    DrawText("1. Check Kingdom Status", 20, 555, 20, ORANGE);
+                    DrawText("2. Change Leadership Style", 20, 580, 20, ORANGE);
 
                     if (IsKeyPressed(KEY_ONE)) {
                         char statusMsg[128];
                         sprintf_s(statusMsg, sizeof(statusMsg), "Kingdom Status: %s rule, %d approval",
-                            currentKingdom.leader.title.c_str(),
-                            currentKingdom.leader.approvalRating);
-                        currentKingdom.addEvent(statusMsg);
+                            newKingdom.leader.title.c_str(),
+                            newKingdom.leader.approvalRating);
+                        newKingdom.addEvent(statusMsg);
                     }
                     else if (IsKeyPressed(KEY_TWO)) {
-                        currentKingdom.leader.style = static_cast<LeadershipStyle>(
-                            (static_cast<int>(currentKingdom.leader.style) + 1) % 3);
+                        newKingdom.leader.style = static_cast<LeadershipStyle>(
+                            (static_cast<int>(newKingdom.leader.style) + 1) % 3);
                         char styleMsg[128];
                         sprintf_s(styleMsg, sizeof(styleMsg), "Changed leadership style to %d",
-                            static_cast<int>(currentKingdom.leader.style));
-                        currentKingdom.addEvent(styleMsg);
+                            static_cast<int>(newKingdom.leader.style));
+                        newKingdom.addEvent(styleMsg);
                     }
                 }
-                else if (newKingdomBuildings[i].name == "New Barracks") {
-                    DrawText("New Barracks Menu", 20, 530, 20, RED);
-                    DrawText("1. Train Troops (+5 morale)", 20, 555, 20, BLACK);
-                    DrawText("2. Recruit Soldiers (10% of peasants)", 20, 580, 20, BLACK);
+                else if (newKingdomBuildings[i].name == "New Barrack") {
+                    DrawText("Army Adda", 20, 530, 20, RED);
+                    DrawText("1. Train Troops (+5 morale)", 20, 555, 20, ORANGE);
+                    DrawText("2. Recruit Soldiers (10% of peasants)", 20, 580, 20, ORANGE);
 
                     if (IsKeyPressed(KEY_ONE)) {
-                        if (currentKingdom.economy.gold >= 20) {
-                            currentKingdom.army.morale += 5;
-                            currentKingdom.economy.gold -= 20;
-                            currentKingdom.addEvent("Troops trained. Morale increased.");
+                        if (newKingdom.economy.gold >= 20) {
+                            newKingdom.army.morale += 5;
+                            newKingdom.economy.gold -= 20;
+                            newKingdom.addEvent("Troops trained. Morale increased.");
                         }
                         else {
-                            currentKingdom.addEvent("Not enough gold to train troops.");
+                            newKingdom.addEvent("Not enough gold to train troops.");
                         }
                     }
                     else if (IsKeyPressed(KEY_TWO)) {
-                        int recruits = currentKingdom.peasants.population / 10;
+                        int recruits = newKingdom.peasants.population / 10;
                         if (recruits > 0) {
-                            currentKingdom.army.soldiers += recruits;
-                            currentKingdom.peasants.population -= recruits;
+                            newKingdom.army.soldiers += recruits;
+                            newKingdom.peasants.population -= recruits;
                             char recruitMsg[128];
                             sprintf_s(recruitMsg, sizeof(recruitMsg), "Recruited %d new soldiers", recruits);
-                            currentKingdom.addEvent(recruitMsg);
+                            newKingdom.addEvent(recruitMsg);
                         }
                         else {
-                            currentKingdom.addEvent("Not enough peasants to recruit.");
+                            newKingdom.addEvent("Not enough peasants to recruit.");
                         }
                     }
                 }
-                // Additional building interactions can be added here
             }
         }
     }
@@ -1723,8 +1691,8 @@ public:
 
 
     }
+
     void addNewKingdom() {
-        Kingdom newKingdom;
         // Use string concatenation method compatible with C++
         char clanNumber[10];
         _itoa_s(additionalKingdoms.size() + 1, clanNumber, 10);
@@ -1777,187 +1745,139 @@ public:
             addNewKingdom();
         }
 
-        // Initialize new kingdom chief position if not set
         if (newKingdomChiefPosition.width == 0) {
             newKingdomChiefPosition = { 500, 400, (float)gridSize, (float)gridSize };
         }
 
-        // Load the texture once before entering the loop
         LoadNewKingdomChiefTexture();
-
-        // Ensure currentKingdomIndex is valid
-        if (currentKingdomIndex < 0 || currentKingdomIndex >= additionalKingdoms.size()) {
-            currentKingdomIndex = 0;
-        }
 
         bool inNewKingdomWindow = true;
 
         while (inNewKingdomWindow && !WindowShouldClose()) {
-            // Check for escape key at the beginning of each loop iteration
             if (IsKeyPressed(KEY_ESCAPE)) {
                 inNewKingdomWindow = false;
-                continue; // Skip to next iteration to exit loop
+                continue;
             }
 
-            // Initialize buildings for the new kingdom
             InitNewKingdomBuildings();
 
-            // Update chief movement
             UpdateNewKingdomChiefMovement();
-
-            // Clan switching
-            if (IsKeyPressed(KEY_TAB)) {
-                if (IsKeyDown(KEY_LEFT_SHIFT)) {
-                    // Previous clan (move backwards)
-                    currentKingdomIndex = (currentKingdomIndex - 1 + additionalKingdoms.size()) % additionalKingdoms.size();
-                }
-                else {
-                    // Next clan (move forwards)
-                    currentKingdomIndex = (currentKingdomIndex + 1) % additionalKingdoms.size();
-                }
-            }
-
-            // Ensure currentKingdomIndex is valid
-            if (currentKingdomIndex < 0 || currentKingdomIndex >= additionalKingdoms.size()) {
-                currentKingdomIndex = 0;
-            }
-
-            Kingdom& currentKingdom = additionalKingdoms[currentKingdomIndex];
 
             BeginDrawing();
             ClearBackground(BLACK);
 
             pixelbackground2();
 
-            // Draw the buildings for the new kingdom
-            DrawNewKingdomBuildings();
 
-            // Draw the chief in the new kingdom
             if (newKingdomChiefTextureLoaded) {
                 DrawTexture(newKingdomChiefTexture, newKingdomChiefPosition.x, newKingdomChiefPosition.y, WHITE);
             }
             else {
-                // Fallback if texture not loaded
                 DrawRectangleRec(newKingdomChiefPosition, RED);
             }
 
-            // Handle building interactions
-            HandleNewKingdomBuildingInteractions(currentKingdom);
+            newkingdomcollisions();
 
-            // Display new kingdom stats
             char msg[128];
             DrawText("New Clan Population:", 10, 50, 18, GREEN);
 
-            sprintf_s(msg, sizeof(msg), "Peasants: %d", currentKingdom.peasants.population);
+            sprintf_s(msg, sizeof(msg), "Peasants: %d", newKingdom.peasants.population);
             DrawText(msg, 30, 70, 18, YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Merchants: %d", currentKingdom.merchants.population);
+            sprintf_s(msg, sizeof(msg), "Merchants: %d", newKingdom.merchants.population);
             DrawText(msg, 30, 90, 18, YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Nobles: %d", currentKingdom.nobles.population);
+            sprintf_s(msg, sizeof(msg), "Nobles: %d", newKingdom.nobles.population);
             DrawText(msg, 30, 110, 18, YELLOW);
 
             sprintf_s(msg, sizeof(msg), "Unrest - Peasants: %d%%, Merchants: %d%%, Nobles: %d%%",
-                static_cast<int>(currentKingdom.peasants.unrest),
-                static_cast<int>(currentKingdom.merchants.unrest),
-                static_cast<int>(currentKingdom.nobles.unrest));
-            DrawText(msg, 30, 130, 16, (currentKingdom.peasants.unrest > 50 ||
-                currentKingdom.merchants.unrest > 50 ||
-                currentKingdom.nobles.unrest > 50) ? RED : YELLOW);
+                static_cast<int>(newKingdom.peasants.unrest),
+                static_cast<int>(newKingdom.merchants.unrest),
+                static_cast<int>(newKingdom.nobles.unrest));
+            DrawText(msg, 30, 130, 16, (newKingdom.peasants.unrest > 50 ||
+                newKingdom.merchants.unrest > 50 ||
+                newKingdom.nobles.unrest > 50) ? RED : YELLOW);
 
             DrawText("Resources:", 10, 170, 18, GREEN);
 
-            sprintf_s(msg, sizeof(msg), "Food: %d", currentKingdom.resources.food);
-            DrawText(msg, 30, 190, 18, (currentKingdom.resources.food < (currentKingdom.peasants.population +
-                currentKingdom.merchants.population +
-                currentKingdom.nobles.population)) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Food: %d", newKingdom.resources.food);
+            DrawText(msg, 30, 190, 18, (newKingdom.resources.food < (newKingdom.peasants.population +
+                newKingdom.merchants.population +
+                newKingdom.nobles.population)) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Wood: %d", currentKingdom.resources.wood);
-            DrawText(msg, 150, 190, 18, (currentKingdom.resources.wood < (int)((currentKingdom.peasants.population +
-                currentKingdom.merchants.population +
-                currentKingdom.nobles.population) * 0.1f)) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Wood: %d", newKingdom.resources.wood);
+            DrawText(msg, 150, 190, 18, (newKingdom.resources.wood < (int)((newKingdom.peasants.population +
+                newKingdom.merchants.population +
+                newKingdom.nobles.population) * 0.1f)) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Stone: %d", currentKingdom.resources.stone);
+            sprintf_s(msg, sizeof(msg), "Stone: %d", newKingdom.resources.stone);
             DrawText(msg, 270, 190, 18, YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Iron: %d", currentKingdom.resources.iron);
-            DrawText(msg, 390, 190, 18, (currentKingdom.resources.iron < currentKingdom.army.soldiers * 1) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Iron: %d", newKingdom.resources.iron);
+            DrawText(msg, 390, 190, 18, (newKingdom.resources.iron < newKingdom.army.soldiers * 1) ? RED : YELLOW);
 
             DrawText("Economy:", 10, 230, 18, GREEN);
 
-            sprintf_s(msg, sizeof(msg), "Gold: %d", static_cast<int>(currentKingdom.economy.gold));
-            DrawText(msg, 30, 250, 18, (currentKingdom.economy.gold < 20.0f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Gold: %d", static_cast<int>(newKingdom.economy.gold));
+            DrawText(msg, 30, 250, 18, (newKingdom.economy.gold < 20.0f) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Debt: %d", static_cast<int>(currentKingdom.economy.debt));
-            DrawText(msg, 150, 250, 18, (currentKingdom.economy.debt > 0.0f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Debt: %d", static_cast<int>(newKingdom.economy.debt));
+            DrawText(msg, 150, 250, 18, (newKingdom.economy.debt > 0.0f) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Tax Rate: %d%%", static_cast<int>(currentKingdom.economy.taxRate * 100));
+            sprintf_s(msg, sizeof(msg), "Tax Rate: %d%%", static_cast<int>(newKingdom.economy.taxRate * 100));
             DrawText(msg, 30, 270, 18, YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Inflation: %d%%", static_cast<int>(currentKingdom.economy.inflation * 100));
-            DrawText(msg, 200, 270, 18, (currentKingdom.economy.inflation > 0.3f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Inflation: %d%%", static_cast<int>(newKingdom.economy.inflation * 100));
+            DrawText(msg, 200, 270, 18, (newKingdom.economy.inflation > 0.3f) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Corruption: %d%%", static_cast<int>(currentKingdom.economy.corruption * 100));
-            DrawText(msg, 370, 270, 18, (currentKingdom.economy.corruption > 0.5f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Corruption: %d%%", static_cast<int>(newKingdom.economy.corruption * 100));
+            DrawText(msg, 370, 270, 18, (newKingdom.economy.corruption > 0.5f) ? RED : YELLOW);
 
             DrawText("Military:", 10, 310, 18, GREEN);
 
-            sprintf_s(msg, sizeof(msg), "Soldiers: %d", currentKingdom.army.soldiers);
-            DrawText(msg, 30, 330, 18, (currentKingdom.army.soldiers == 0) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Soldiers: %d", newKingdom.army.soldiers);
+            DrawText(msg, 30, 330, 18, (newKingdom.army.soldiers == 0) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Training: %d%%", static_cast<int>(currentKingdom.army.training));
-            DrawText(msg, 150, 330, 18, (currentKingdom.army.training < 30.0f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Training: %d%%", static_cast<int>(newKingdom.army.training));
+            DrawText(msg, 150, 330, 18, (newKingdom.army.training < 30.0f) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Morale: %d%%", static_cast<int>(currentKingdom.army.morale));
-            DrawText(msg, 300, 330, 18, (currentKingdom.army.morale > 50.0f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Morale: %d%%", static_cast<int>(newKingdom.army.morale));
+            DrawText(msg, 300, 330, 18, (newKingdom.army.morale > 50.0f) ? RED : YELLOW);
 
-            sprintf_s(msg, sizeof(msg), "Army Corruption: %d%%", static_cast<int>(currentKingdom.army.corruption * 100));
-            DrawText(msg, 30, 350, 18, (currentKingdom.army.corruption > 0.3f) ? RED : YELLOW);
+            sprintf_s(msg, sizeof(msg), "Army Corruption: %d%%", static_cast<int>(newKingdom.army.corruption * 100));
+            DrawText(msg, 30, 350, 18, (newKingdom.army.corruption > 0.3f) ? RED : YELLOW);
 
-            // Add control instructions
             DrawText("Use arrow keys to move chief", 30, 400, 18, WHITE);
             DrawText("Press ESC to return to main kingdom", 30, 430, 18, WHITE);
 
-            // Display event log for the new kingdom
+            // recent events event log
             DrawText("Recent Events:", 800, 50, 18, GREEN);
-            int evCount = currentKingdom.events.count;
+            int evCount = newKingdom.events.count;
             for (int i = 0; i < evCount; ++i) {
-                DrawText(currentKingdom.events.messages[i], 820, 70 + 20 * i, 16, GOLD);
+                DrawText(newKingdom.events.messages[i], 820, 70 + 20 * i, 16, GOLD);
             }
             if (evCount == 0) {
                 DrawText("No events yet.", 820, 70, 16, GOLD);
             }
 
-            // Display clan selection controls if there are multiple clans
-            if (additionalKingdoms.size() > 1) {
-                DrawText("PRESS TAB/TAB+SHIFT TO SWITCH BETWEEN CLANS", 800, 580, 16, WHITE);
-
-                // Display current clan number
-                char clanMsg[64];
-                sprintf_s(clanMsg, sizeof(clanMsg), "Current Clan: %d of %d",
-                    currentKingdomIndex + 1,
-                    (int)additionalKingdoms.size());
-                DrawText(clanMsg, 800, 610, 18, GOLD);
-            }
+         
 
             // Handle day advancement
             if (IsKeyPressed(KEY_SPACE)) {
-                currentKingdom.updateday();
+                newKingdom.updateday();
                 char dayMsg[128];
-                sprintf_s(dayMsg, sizeof(dayMsg), "Day %d passed", currentKingdom.day);
-                currentKingdom.addEvent(dayMsg);
+                sprintf_s(dayMsg, sizeof(dayMsg), "Day %d passed", newKingdom.day);
+                newKingdom.addEvent(dayMsg);
             }
 
             EndDrawing();
         }
     }
     void newclan() {
-        // Don't call BeginDrawing/EndDrawing here - should be handled by the main loop
         DrawText("Press ENTER to add a new clan", 20, 530, 20, RED);
 
-        // Check for ENTER key
         if (IsKeyPressed(KEY_ENTER)) {
-            newwindow(); // The function will handle its own loop
+            newwindow();
         }
     }
 
